@@ -43,6 +43,7 @@ public class Utils {
 		HashMap<String, String> confList = new HashMap<>();
 
 		// TODO: Change to Mac Path
+		System.out.println(System.getProperty("user.dir"));
 		String pathToConfIniFile = System.getProperty("user.dir") + "/config.ini";
 
 		try {

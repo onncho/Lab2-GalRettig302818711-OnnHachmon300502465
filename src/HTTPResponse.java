@@ -175,7 +175,8 @@ public class HTTPResponse {
 
 		String pathname = ConfigurationObject.getRoot() + i_RequestedPage;
 
-		pathname = pathname.replace('/', '\\');
+		// TODO: Mac Path
+		//pathname = pathname.replace('/', '\\');
 
 		System.out.println(pathname);
 
