@@ -20,6 +20,10 @@ public class AnalyzerTask {
 		m_allowedVideoExt = allowedVideoExt;
 		m_allowedDocExt = allowedDocExt;
 		
+		m_anchors = new LinkedList<>();
+		m_images = new LinkedList<>();
+		m_videos = new LinkedList<>();
+		m_docs = new LinkedList<>();
 	}
 
 	//TODO: temp run method until threads will be implemented
@@ -30,15 +34,15 @@ public class AnalyzerTask {
 	}
 	
 	private void lookForImages(){
-		m_images = getAllPropertiesValueByTag("<img", "src=");
+		getAllPropertiesValueByTag("<img", "src=");
 	}
 	
 	private void lookForAnchors(){
-		m_anchors = getAllPropertiesValueByTag("<a", "href=");
+		getAllPropertiesValueByTag("<a", "href=");
 	}
 	
-	private LinkedList<String> getAllPropertiesValueByTag(String subjectTag, String propertyToSearchFor){
-		LinkedList<String> list = new LinkedList<>();
+	private void getAllPropertiesValueByTag(String subjectTag, String propertyToSearchFor){
+		//LinkedList<String> list = new LinkedList<>();
 		
 		//String subjectTag = "<a";
 		//String propertyToSearchFor = "href=";
@@ -66,12 +70,13 @@ public class AnalyzerTask {
 
 			if(linkStartIndex > -1 && linkEndIndex > -1){
 				link = m_htmlSourceCode.substring(linkStartIndex, linkEndIndex);
-				list.push(this.removeQuoteCharFromString(link));
+				//list.push(this.removeQuoteCharFromString(link));
+				populateCorrectList(this.removeQuoteCharFromString(link));
 			}
 
 			currentIndex = m_htmlSourceCode.indexOf(subjectTag, currentIndex + subjectTag.length());
 		}
-		return list;
+		
 	}
 	
 
