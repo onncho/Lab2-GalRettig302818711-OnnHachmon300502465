@@ -57,6 +57,13 @@ public class Utils {
 			confList.put("root", prop.getProperty("root"));
 			confList.put("maxThreads", prop.getProperty("maxThreads"));
 			confList.put("defaultPage", prop.getProperty("defaultPage"));
+			
+			//Lab2
+			confList.put("maxDownloader", prop.getProperty("maxDownloader"));
+			confList.put("maxAnalzer", prop.getProperty("maxAnalyzer"));
+			confList.put("imageExtensionsNotParsed", prop.getProperty("imageExtensions"));
+			confList.put("videoExtensionsNotParsed", prop.getProperty("videoExtensions"));
+			confList.put("documentExtensionsNotParsed", prop.getProperty("documentExtensions"));
 
 		} catch (IOException ex) {
 			System.err.println("Could not Read The Config File duo to bad Path or IOERROR");
