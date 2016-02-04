@@ -6,12 +6,20 @@ public class AnalyzerTask {
 	LinkedList<String> m_images;
 	LinkedList<String> m_videos;
 	LinkedList<String> m_docs;
-
+	
+	LinkedList<String> m_allowedImageExt;
+	LinkedList<String> m_allowedVideoExt;
+	LinkedList<String> m_allowedDocExt;
+	
 	String m_htmlSourceCode;
 
-	public AnalyzerTask(String i_htmlSourceCode){
+	public AnalyzerTask(String i_htmlSourceCode, LinkedList<String> allowedImageExt, LinkedList<String> allowedVideoExt, LinkedList<String> allowedDocExt){
 		m_htmlSourceCode = i_htmlSourceCode;
-		m_anchors = new LinkedList<>();
+		
+		m_allowedImageExt = allowedImageExt;
+		m_allowedVideoExt = allowedVideoExt;
+		m_allowedDocExt = allowedDocExt;
+		
 	}
 
 	//TODO: temp run method until threads will be implemented
@@ -20,7 +28,7 @@ public class AnalyzerTask {
 		lookForAnchors();
 		lookForImages();
 	}
-
+	
 	private void lookForImages(){
 		m_images = getAllPropertiesValueByTag("<img", "src=");
 	}
@@ -100,8 +108,59 @@ public class AnalyzerTask {
 			currentIndex = m_htmlSourceCode.indexOf(subjectTag, currentIndex + subjectTag.length());
 		}
 	}
+	
+	
+	private int populateCorrectList(String linkToMap){
+		String ext = getExtensionFromString(linkToMap);
+		int i = ext != null ? 0 : 3;//doesn't have an extension, mapping to anchors list stright away
+		while(i < 4){
+			if(i == 0){
+				if(listContainsElement(m_allowedImageExt, ext)){
+					m_images.push(linkToMap);
+					break;
+				}
+			}
+			else if(i == 1) {
+				if(listContainsElement(m_allowedVideoExt, ext)){
+					m_videos.push(linkToMap);
+					break;
+				}
+			}
+			else if(i == 2){
+				if(listContainsElement(m_allowedDocExt, ext)){
+					m_docs.push(linkToMap);
+					break;
+				}
+			}
+			else {
+				m_anchors.push(linkToMap);
+				break;
+			}
+			i++;
+		}
+		return i;
+	}
+	
+	private String getExtensionFromString(String linkToMap) {
+		String ext = null;
+		int indexOfDotChar = linkToMap.indexOf(".");
+		if(indexOfDotChar > -1){
+			ext = linkToMap.substring(indexOfDotChar + 1);
+		}
+		return ext;
+	}
 
-
+	private boolean listContainsElement(LinkedList<String> set, String member){
+		int i = 0;
+		while(i < set.size()){
+			if(set.get(i).equals(member)){
+				return true;
+			}
+			i++;
+		}
+		return false;
+	}
+	
 	private String removeQuoteCharFromString(String str){
 		return str.substring(1, str.length());
 	}
