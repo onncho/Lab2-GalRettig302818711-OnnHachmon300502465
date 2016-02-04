@@ -1,5 +1,3 @@
-package webserver;
-
 import java.util.HashMap;
 
 // SingleTone Class

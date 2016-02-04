@@ -1,4 +1,4 @@
-package webserver;
+
 
 public enum HttpRequestType {
 	GET("GET"),
