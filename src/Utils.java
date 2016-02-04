@@ -42,8 +42,8 @@ public class Utils {
 		InputStream input = null;
 		HashMap<String, String> confList = new HashMap<>();
 
-
-		String pathToConfIniFile = System.getProperty("user.dir") + "\\config.ini";
+		// TODO: Change to Mac Path
+		String pathToConfIniFile = System.getProperty("user.dir") + "/config.ini";
 
 		try {
 			input = new FileInputStream(pathToConfIniFile);
