@@ -17,6 +17,12 @@ public class AnalyzerTask {
 	//TODO: temp run method until threads will be implemented
 	public void tempRunMethod__ChangeWhenThreadsImp(){}
 	
+	private void getAllowedImagesFromSource(){
+		String subjectTag = "<a";
+		String propertyToSearchFor = "href=";
+		
+	}
+	
 	private void getAllAnchorsFromSource(){
 		String subjectTag = "<a";
 		String propertyToSearchFor = "href=";
