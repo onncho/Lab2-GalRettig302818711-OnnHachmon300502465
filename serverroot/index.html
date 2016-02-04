@@ -1,0 +1,205 @@
+<html>
+	<head>
+		<title>LAB #1: December 2015</title>
+		 <meta charset="utf-8">
+    	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    	<meta name="viewport" content="width=device-width, initial-scale=1">
+    	<link rel="shortcut icon" type="image/png" href="/rocket.png"/>
+
+    	<style type="text/css">
+    		body {
+    			width: 100%;
+    			padding: 0;
+    			margin: 0;
+    		}
+
+    		.container {
+    			width: 80%;
+    			margin: 10%;
+    			margin-top: 5%;
+    			margin-bottom: 3%;
+    			text-align: center;
+    		}
+
+    		h1 {
+    			color: #5cb85c;
+                position: fixed;
+    			margin-left: -10%;
+    			margin-top: -5%;
+    			width: 100%;
+    			background: #eee;
+    			height: 60px;
+    		}
+
+    		h2 {
+    			color: #337ab7;
+    		}
+
+    		p {
+    			color: #333333;
+				font-family: ‘Courier New’, Courier, monospace;
+				font-size: 15px;
+    		}
+
+    		a {
+    			color: #337ab7;
+    		}
+
+    		img {
+    			width: 15%;
+    			height: 15%;
+    			margin: 1%;
+    		}
+
+    		hr {
+    			border-color: #337ab7;
+    		}
+
+			.form-style {
+			    margin:10px auto;
+			    max-width: 400px;
+			    padding: 20px 12px 10px 20px;
+			    font: 13px "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+			}
+			.form-style li {
+			    padding: 0;
+			    display: block;
+			    list-style: none;
+			    margin: 10px 0 0 0;
+			}
+			.form-style label{
+			    margin:0 0 3px 0;
+			    padding:0px;
+			    display:block;
+			    font-weight: bold;
+			}
+			.form-style input[type=text], 
+			textarea {
+			    box-sizing: border-box;
+			    -webkit-box-sizing: border-box;
+			    -moz-box-sizing: border-box;
+			    border:1px solid #BEBEBE;
+			    padding: 7px;
+			    margin:0px;
+			    -webkit-transition: all 0.30s ease-in-out;
+			    -moz-transition: all 0.30s ease-in-out;
+			    -ms-transition: all 0.30s ease-in-out;
+			    -o-transition: all 0.30s ease-in-out;
+			    outline: none;  
+			}
+			.form-style input[type=text]:focus, 
+			.form-style textarea:focus {
+			    -moz-box-shadow: 0 0 8px #88D5E9;
+			    -webkit-box-shadow: 0 0 8px #88D5E9;
+			    box-shadow: 0 0 8px #88D5E9;
+			    border: 1px solid #88D5E9;
+			}
+			.form-style .field-divided{
+			    width: 49%;
+			}
+
+			.form-style .field-long{
+			    width: 100%;
+			}
+
+			.form-style .field-textarea{
+			    height: 100px;
+			}
+			.form-style input[type=submit] {
+			    background: #337ab7;
+			    padding: 8px 15px 8px 15px;
+			    border: none;
+			    color: #fff;
+			}
+			.form-style input[type=submit]:hover {
+			    background: #4691A4;
+			    box-shadow:none;
+			    -moz-box-shadow:none;
+			    -webkit-box-shadow:none;
+			}
+
+
+    	</style>
+	</head>
+	<body>
+
+		<div class="container">
+			<!-- Moving Title  -->
+			<h1><marquee align="middle">
+                Computer networks 2015/2016: LAB #1 
+			</marquee></h1>
+		</div>
+
+		<div class="container">
+			<!-- Fixed Title -->
+			<h2>Gal Retting &amp Onn Hachmon</h2>
+		</div>
+
+		<div class="container">
+			<!-- Test and link to jump to last pic -->
+			<p>Show me the last image: <span><a href="#lastImage">Here</a></span></p>
+		</div>
+
+		<div class="container">
+			<!-- show link to junmp to form -->
+			<p>Show me the form: <span><a href="#myForm">Here</a></span></p>
+		</div>
+
+
+		<div class="container">
+				<!-- Five centered images side by side -->
+				<img src="1.jpg">
+				<img src="2.jpg">
+				<img src="3.jpg">
+				<img src="4.jpg">
+				<img src="5.jpg">
+		</div>
+
+		<div class="container">
+			<!-- Test and link to jump to last pic -->
+			<p>Course Website: <span><a href="http://moodle.idc.ac.il/course/view.php?id=22816">Here</a></span></p>
+		</div>
+
+		<div class="container">
+			<!-- Test and link to jump to last pic -->
+			<p>Favorite Website: <span><a href="http://www.themarker.com">Here</a></span></p>
+		</div>
+
+		<!-- Horizontal line -->
+		<hr>
+
+		<div class="container">
+			<!-- Last Image -->
+			<a name="lastImage"><img src="6.jpg"></a>
+		</div>
+
+		<div class="container">
+		
+			<!-- Form containing : Sender, Receiver, Subject, Message Field, and Submit bottom. -->
+			<form method = "POST" action = "/params_info.html">
+				<a name="myForm">
+				<ul class="form-style">
+    			<li>
+    				<label>Sender/Reciever</label>
+    				<input type="text" name="sender" class="field-divided" placeholder="Sender" />
+    				<input type="text" name="receiver" class="field-divided" placeholder="Receiver" />
+    			</li>
+
+			    <li>
+			        <label>Message</label>
+			        <textarea name="message" id="field5" class="field-long field-textarea"></textarea>
+			    </li>
+			    <li>
+			    	 <input type="checkbox" name="myCheckBox" class="field-long" value="Checked"> Check Box Button
+			    </li>
+			    <li>
+			        <input type="submit" value="Submit" />
+			    </li>
+				</ul>
+				</a>
+			</form>
+
+		</div>
+
+	</body>
+</html>
