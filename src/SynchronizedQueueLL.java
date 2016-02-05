@@ -2,18 +2,18 @@ import java.util.LinkedList;
 
 public class SynchronizedQueueLL {
 	
-	private LinkedList<String> m_buffer;
+	private LinkedList<Runnable> m_buffer;
 	private int m_producers;
 	
 	public SynchronizedQueueLL() {
 		// TODO Auto-generated constructor stub
-		m_buffer = new LinkedList<String>();
+		m_buffer = new LinkedList<Runnable>();
 		// TODO: Maybe to delete, depends if producers is needed...??
 		m_producers = 0;
 	}
 	
 	// dequeue operation
-	public synchronized String dequeue() {
+	public synchronized Runnable dequeue() {
 		
 		// in case the queue is empty
 		while (m_buffer.isEmpty())
@@ -33,15 +33,15 @@ public class SynchronizedQueueLL {
 		}
 		
 		// dequeue
-		String res = m_buffer.getLast();
+		Runnable task = m_buffer.getLast();
 		m_buffer.removeLast();
 		notifyAll();
 		
-		return res;
+		return task;
 	}
 	
 	// queue operation
-	public synchronized void enqueue(String i_item) {
+	public synchronized void enqueue(Runnable i_item) {
 		// add to queue
 		m_buffer.addFirst(i_item);
 		notifyAll();

@@ -18,9 +18,9 @@ public class ThreadPool {
 		}
 	}
 
-	public void push(Runnable r) {
+	public void push(Runnable task) {
 		synchronized (m_taskQueue) {
-			m_taskQueue.addLast(r);
+			m_taskQueue.addLast(task);
 			m_taskQueue.notify();
 		}
 	}

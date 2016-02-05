@@ -8,9 +8,16 @@ public class ServerListener {
 	
 	private ThreadPool m_threadPool;
 	
+	// TODO: test for lab 2
+	private ThreadPoolV1 m_pool;
+	
 	public ServerListener(ThreadPool i_ThreadPool)
 	{
 		this.m_threadPool = i_ThreadPool;
+	}
+	
+	public ServerListener(ThreadPoolV1 i_pool) {
+		m_pool = i_pool;
 	}
 	
 	public void start() throws IOException
@@ -32,7 +39,9 @@ public class ServerListener {
 		while (true) {
 			Socket connection = serverSocket.accept();
 			HandleRequest handleRequest = new HandleRequest(connection);
-			this.m_threadPool.push(handleRequest);
+			//TODO: test for lab2
+			//this.m_threadPool.push(handleRequest);
+			m_pool.putTaskInDownloaderQueue(handleRequest);
 		}
 	}
 }

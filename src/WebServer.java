@@ -15,11 +15,17 @@ public class WebServer {
 		if(ConfigurationObject.getPortNumber() == null){
 			throw new IOException("Problem in Reading The Config File");
 		}
+		
+		// TODO: test for lab2
+		//ThreadPool threadPool = new ThreadPool(ConfigurationObject.getMaxThreads());
+		SynchronizedQueueLL taskQ = new SynchronizedQueueLL();
+		ThreadPoolV1 webRequestsPool = new ThreadPoolV1(taskQ, ConfigurationObject.getMaxThreads());
+		
+		//ServerListener webserver = new ServerListener(threadPool);
+		ServerListener webSrv = new ServerListener(webRequestsPool);
 
-		ThreadPool threadPool = new ThreadPool(ConfigurationObject.getMaxThreads());
-		ServerListener webserver = new ServerListener(threadPool);
-
-		webserver.start();
+		//webserver.start();
+		webSrv.start();
 	}
 
 }

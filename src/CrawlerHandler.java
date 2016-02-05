@@ -17,9 +17,13 @@ public class CrawlerHandler {
 		Analyzer = new ThreadPool(Integer.parseInt(ConfigurationObject.getMaxAnalyzers()));
 		m_DomainURL = i_URL;
 		PendingUrl2Downloads = new SynchronizedQueueLL();
-		PendingUrl2Downloads.enqueue(m_DomainURL);
+		//PendingUrl2Downloads.enqueue(m_DomainURL);
 		PendingHTML2Analyze = new SynchronizedQueueLL();
 	}
 	
-	// Crawler start -> queues created -> first domain url configured -> send to Downloader 
+	// Crawler start -> queues created -> first domain url configured -> send to Downloader
+	
+	// ThreadPool with fix size - downloaders (20)
+	// ThreadPool with fix size - Analyzers (5)
+	// SyncronizedQueueLL - Sharing Resource of threads
 }
