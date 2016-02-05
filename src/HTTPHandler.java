@@ -1,4 +1,135 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.net.URL;
+import java.net.UnknownHostException;
 
 public class HTTPHandler {
+	final static String _CRLF = "\r\n";
+	
+	public static String[] sendHttpRequest(String target, String requestType){
+		String res[] = new String[2];
+		String response = "";
+		boolean fetchContent = requestType.equals("GET");
+		try {
+			URL uri = new URL(target);
+			
+			String host = uri.getHost();
+			String path = uri.getPath();
+			path = path.equals("") ? "/" : path;
+			
+			String requestLine = requestType + " " + path + " " + "HTTP/1.0";
+			String headers = "Host: " + host;
+			
+			
+			String currentRecievedLine = "";
+			
+			Socket socket = new Socket(InetAddress.getByName(host), 80);
+			PrintWriter writer = new PrintWriter(socket.getOutputStream());
+			if(!fetchContent){
+				BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+
+				writer.write(requestLine);
+				writer.write(_CRLF.toCharArray());
+				writer.flush();
+
+				writer.write(headers);
+				writer.write(_CRLF.toCharArray());
+				writer.flush();
+
+				writer.write(_CRLF.toCharArray());
+				writer.flush();
+
+				while((currentRecievedLine = reader.readLine()) != null){
+					response += currentRecievedLine + "\n";
+				}
+				System.out.println(response);
+
+				res[0] = response;
+				res[1] = "";
+				
+				reader.close();
+				
+			} else {
+				res = readHttpResponse(socket);
+			}
+			writer.close();
+			socket.close();
+			
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return res;
+	}
+	
+	public static String[] readHttpResponse(Socket connection) {
+		String ContentLengthHeader = "Content-Length: ";
+		int contentLength = -1;
+		String m_FullRequest = "";
+		char[] m_MsgBodyCharBuffer;
+		StringBuilder m_MessageBodyBuilder;
+		String m_messageBodyString = "";
+		
+		try {
+			if (connection.isClosed()) {
+				return null;
+			}
+			BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+			String line = reader.readLine();
+
+			// Read Request According to Http Protocol
+			while (line != null && !line.equals("")) {
+				// Check For Request With A Body Message
+				if (line.indexOf(ContentLengthHeader) > -1) {
+					String bodyContentLengthAsString = line.substring(ContentLengthHeader.length());
+					contentLength = Integer.parseInt(bodyContentLengthAsString);
+				}
+				m_FullRequest += (line + "\n");
+				line = reader.readLine();
+			}
+
+			// Handle With Request that Contain Body Message
+			if (contentLength > 0) {
+				m_MsgBodyCharBuffer = new char[contentLength];
+				reader.read(m_MsgBodyCharBuffer);
+				m_MessageBodyBuilder = new StringBuilder();
+
+				for (int i = 0; i < m_MsgBodyCharBuffer.length; i++) {
+					m_MessageBodyBuilder.append(m_MsgBodyCharBuffer[i]);
+				}
+				m_messageBodyString = m_MessageBodyBuilder.toString();
+			}
+			
+			reader.close();
+
+		} catch (IOException e) {
+			System.err.println("ERROR: IO Exception");
+		}
+		
+		return new String[]{m_FullRequest, m_messageBodyString};
+	}
+
+	/**
+	 * 
+	 * @param target : link to communicate with
+	 * @return Response
+	 */
+	public static String sendHttpHeadRequest(String target){
+		return (sendHttpRequest(target, "HEAD"))[0];
+	}
+	
+	/**
+	 * 
+	 * @param target : link to communicate with
+	 * @return String Array -> [Response, Response-Mesaage-Body]
+	 */
+	public static String[] sendHttpGetRequest(String target){
+		return sendHttpRequest(target, "GET");
+	}
 
 }
