@@ -184,7 +184,8 @@ public class AnalyzerTask {
 	public static class linkEstimator{
 		final String _CRLF = "\r\n";
 		
-		public void sendHttpRequest(String target, String requestType){
+		public String sendHttpRequest(String target, String requestType){
+			String response = "";
 			try {
 				URL uri = new URL(target);
 				
@@ -195,7 +196,7 @@ public class AnalyzerTask {
 				String requestLine = requestType + " " + path + " " + "HTTP/1.0";
 				String headers = "Host: " + host;
 				
-				String response = "";
+				
 				String currentRecievedLine = "";
 				
 				Socket socket = new Socket(InetAddress.getByName(host), 80);
@@ -214,7 +215,7 @@ public class AnalyzerTask {
 				writer.flush();
 				
 				while((currentRecievedLine = reader.readLine()) != null){
-					response += currentRecievedLine;
+					response += currentRecievedLine + "\n";
 				}
 				System.out.println(response);
 				
@@ -226,8 +227,8 @@ public class AnalyzerTask {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+			return response;
 		}
-		
 	}
 
 }
