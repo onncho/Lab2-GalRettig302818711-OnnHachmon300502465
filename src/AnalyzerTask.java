@@ -184,14 +184,16 @@ public class AnalyzerTask {
 	public static class linkEstimator{
 		final String _CRLF = "\r\n";
 		
-		public String sendHttpRequest(String target, String requestType){
+		public String[] sendHttpRequest(String target, String requestType){
+			String res[] = new String[2];
 			String response = "";
+			boolean fetchContent = requestType.equals("GET");
 			try {
 				URL uri = new URL(target);
 				
 				String host = uri.getHost();
 				String path = uri.getPath();
-				path = path == "" ? "/" : path;
+				path = path.equals("") ? "/" : path;
 				
 				String requestLine = requestType + " " + path + " " + "HTTP/1.0";
 				String headers = "Host: " + host;
@@ -201,43 +203,101 @@ public class AnalyzerTask {
 				
 				Socket socket = new Socket(InetAddress.getByName(host), 80);
 				PrintWriter writer = new PrintWriter(socket.getOutputStream());
-				BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-				
-				writer.write(requestLine);
-				writer.write(_CRLF.toCharArray());
-				writer.flush();
-				
-				writer.write(headers);
-				writer.write(_CRLF.toCharArray());
-				writer.flush();
-				
-				writer.write(_CRLF.toCharArray());
-				writer.flush();
-				
-				while((currentRecievedLine = reader.readLine()) != null){
-					response += currentRecievedLine + "\n";
+				if(!fetchContent){
+					BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+
+					writer.write(requestLine);
+					writer.write(_CRLF.toCharArray());
+					writer.flush();
+
+					writer.write(headers);
+					writer.write(_CRLF.toCharArray());
+					writer.flush();
+
+					writer.write(_CRLF.toCharArray());
+					writer.flush();
+
+					while((currentRecievedLine = reader.readLine()) != null){
+						response += currentRecievedLine + "\n";
+					}
+					System.out.println(response);
+
+					res[0] = response;
+					res[1] = "";
+					
+					reader.close();
+					
+				} else {
+					res = readHttpResponse(socket);
 				}
-				System.out.println(response);
-				
-				reader.close();
 				writer.close();
+				socket.close();
 				
 			} catch (UnknownHostException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			return response;
+			return res;
 		}
 		
+		public static String[] readHttpResponse(Socket connection) {
+			String ContentLengthHeader = "Content-Length: ";
+			int contentLength = -1;
+			String m_FullRequest = "";
+			char[] m_MsgBodyCharBuffer;
+			StringBuilder m_MessageBodyBuilder;
+			String m_messageBodyString = "";
+			
+			try {
+				if (connection.isClosed()) {
+					return null;
+				}
+				BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+				String line = reader.readLine();
+
+				// Read Request According to Http Protocol
+				while (line != null && !line.equals("")) {
+					// Check For Request With A Body Message
+					if (line.indexOf(ContentLengthHeader) > -1) {
+						String bodyContentLengthAsString = line.substring(ContentLengthHeader.length());
+						contentLength = Integer.parseInt(bodyContentLengthAsString);
+					}
+					m_FullRequest += (line + "\n");
+					line = reader.readLine();
+				}
+
+				// Handle With Request that Contain Body Message
+				if (contentLength > 0) {
+					m_MsgBodyCharBuffer = new char[contentLength];
+					reader.read(m_MsgBodyCharBuffer);
+					m_MessageBodyBuilder = new StringBuilder();
+
+					for (int i = 0; i < m_MsgBodyCharBuffer.length; i++) {
+						m_MessageBodyBuilder.append(m_MsgBodyCharBuffer[i]);
+					}
+					m_messageBodyString = m_MessageBodyBuilder.toString();
+				}
+
+				// TRACE: Request Headers
+				//System.out.println(m_FullRequest);
+				
+				reader.close();
+
+			} catch (IOException e) {
+				System.err.println("ERROR: IO Exception");
+			}
+			
+			return new String[]{m_FullRequest, m_messageBodyString};
+		}
+
+		
 		public String sendHttpHeadRequest(String target){
-			return sendHttpRequest(target, "HEAD");
+			return (sendHttpRequest(target, "HEAD"))[0];
 		}
 		
 		public String[] sendHttpGetRequest(String target){
-			String[] resAndContent;
-			String res = sendHttpRequest(target, "GET");
-			
+			return sendHttpRequest(target, "GET");
 		}
 	}
 
