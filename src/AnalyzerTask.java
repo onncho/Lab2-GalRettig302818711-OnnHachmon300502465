@@ -1,3 +1,12 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.net.URL;
+import java.net.UnknownHostException;
+import java.util.HashMap;
 import java.util.LinkedList;
 
 public class AnalyzerTask {
@@ -169,5 +178,59 @@ public class AnalyzerTask {
 	private String removeQuoteCharFromString(String str){
 		return str.substring(1, str.length());
 	}
+	
+	
+	
+	public static class linkEstimator{
+		final String _CRLF = "\r\n";
+		
+		public void sendHttpRequest(String target, String requestType){
+			try {
+				URL uri = new URL(target);
+				
+				String host = uri.getHost();
+				String path = uri.getPath();
+				path = path == "" ? "/" : path;
+				
+				String requestLine = requestType + " " + path + " " + "HTTP/1.0";
+				String headers = "Host: " + host;
+				
+				String response = "";
+				String currentRecievedLine = "";
+				
+				Socket socket = new Socket(InetAddress.getByName(host), 80);
+				PrintWriter writer = new PrintWriter(socket.getOutputStream());
+				BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+				
+				writer.write(requestLine);
+				writer.write(_CRLF.toCharArray());
+				writer.flush();
+				
+				writer.write(headers);
+				writer.write(_CRLF.toCharArray());
+				writer.flush();
+				
+				writer.write(_CRLF.toCharArray());
+				writer.flush();
+				
+				while((currentRecievedLine = reader.readLine()) != null){
+					response += currentRecievedLine;
+				}
+				System.out.println(response);
+				
+				reader.close();
+				writer.close();
+				
+			} catch (UnknownHostException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		
+	}
 
 }
+
+
+
