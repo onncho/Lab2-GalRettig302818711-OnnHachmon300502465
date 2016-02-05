@@ -229,6 +229,10 @@ public class AnalyzerTask {
 			}
 			return response;
 		}
+		
+		public String sendHttpHeadRequest(String target){
+			return sendHttpRequest(target, "HEAD");
+		}
 	}
 
 }
