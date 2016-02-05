@@ -233,6 +233,12 @@ public class AnalyzerTask {
 		public String sendHttpHeadRequest(String target){
 			return sendHttpRequest(target, "HEAD");
 		}
+		
+		public String[] sendHttpGetRequest(String target){
+			String[] resAndContent;
+			String res = sendHttpRequest(target, "GET");
+			
+		}
 	}
 
 }
