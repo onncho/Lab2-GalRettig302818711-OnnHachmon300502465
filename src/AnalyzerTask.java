@@ -9,7 +9,6 @@ import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.LinkedList;
 
-import javax.xml.ws.spi.http.HttpHandler;
 
 public class AnalyzerTask implements Runnable {
 
@@ -22,14 +21,20 @@ public class AnalyzerTask implements Runnable {
 	LinkedList<String> m_allowedVideoExt;
 	LinkedList<String> m_allowedDocExt;
 	
+	HTTPQuery query = new HTTPQuery();
+	
+	ThreadPoolV1 m_threadPool;
+	
+	
 	String m_htmlSourceCode;
 
-	public AnalyzerTask(String i_htmlSourceCode){
+	public AnalyzerTask(String i_htmlSourceCode, ThreadPoolV1 i_threadPool){
 		m_htmlSourceCode = i_htmlSourceCode;
+		m_threadPool = i_threadPool;
 		
-		//m_allowedImageExt = allowedImageExt;
-		//m_allowedVideoExt = allowedVideoExt;
-		//m_allowedDocExt = allowedDocExt;
+		m_allowedImageExt = (LinkedList<String>) ConfigurationObject.getImageExtensions();
+		m_allowedVideoExt = (LinkedList<String>) ConfigurationObject.getVideoExtensions();
+		m_allowedDocExt = (LinkedList<String>) ConfigurationObject.getDocumentExtensions();
 		
 		m_anchors = new LinkedList<>();
 		m_images = new LinkedList<>();
@@ -38,12 +43,29 @@ public class AnalyzerTask implements Runnable {
 	}
 
 	//TODO: temp run method until threads will be implemented
-	public void tempRunMethod__ChangeWhenThreadsImp(){
+	
+	@Override
+	public void run() {
 		//getAllAnchorsFromSource();
 		lookForAnchors();
 		lookForImages();
+		
+		//////
+		/////
+		LinkedList<String> internalLinksToDownload = getInternalAnchors();
+		for(int i = 0; i < internalLinksToDownload.size(); i++){
+			Downloader downloader = new Downloader(m_threadPool, internalLinksToDownload.get(i));
+			m_threadPool.putTaskInDownloaderQueue((Runnable) downloader);
+		}
+		
+		
 	}
 	
+	private LinkedList<String> getInternalAnchors() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	private void lookForImages(){
 		getAllPropertiesValueByTag("<img", "src=");
 	}
@@ -184,7 +206,7 @@ public class AnalyzerTask implements Runnable {
 	private String fetchImageLength(){
 		String link = m_images.pop();
 		try {
-			String response = HTTPQuery.sendHttpHeadRequest(link);
+			String response = query.sendHttpHeadRequest(link);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -192,11 +214,7 @@ public class AnalyzerTask implements Runnable {
 		return null;
 	}
 
-	@Override
-	public void run() {
-		// TODO Auto-generated method stub
-		
-	}
+
 
 }
 
