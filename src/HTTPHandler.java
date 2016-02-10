@@ -140,7 +140,7 @@ public class HTTPHandler {
 		return lengthValue + _seperator + typeValue;
 	}
 
-	public static String sendHttpHeadRequestAndGetTypeAndLengthFromResponse(String target){
+	public static String sendHttpHeadRequestAndGetTypeAndLengthFromResponse(String target) throws UnknownHostException, IOException{
 		String response = sendHttpRequest(target, "HEAD")[0];
 		String lengthAndType = parseHttpHeadResponse(response);
 		return lengthAndType;
