@@ -7,7 +7,7 @@ import java.net.Socket;
 import java.net.URL;
 import java.net.UnknownHostException;
 
-public class HTTPHandler {
+public class HTTPQuery {
 	final static String _CRLF = "\r\n";
 	
 	public static String[] sendHttpRequest(String target, String requestType) throws IOException, UnknownHostException{
@@ -68,7 +68,7 @@ public class HTTPHandler {
 		}
 		return res;
 	}
-	
+	//TODO: check if we can make it to one method instead of 2
 	public static String[] readHttpResponse(Socket connection) throws IOException{
 		String ContentLengthHeader = "Content-Length: ";
 		int contentLength = -1;
@@ -118,6 +118,7 @@ public class HTTPHandler {
 	}
 	
 	
+	
 	private static String parseHttpHeadResponse(String response){
 		String[] responseLines = response.split("\n");
 		String _contentLength = "Content-Length: ";
@@ -140,6 +141,9 @@ public class HTTPHandler {
 		return lengthValue + _seperator + typeValue;
 	}
 
+	// <img src="www.ynet.co.il/image/logo_2.png ...>
+	//
+	//
 	public static String sendHttpHeadRequestAndGetTypeAndLengthFromResponse(String target) throws UnknownHostException, IOException{
 		String response = sendHttpRequest(target, "HEAD")[0];
 		String lengthAndType = parseHttpHeadResponse(response);

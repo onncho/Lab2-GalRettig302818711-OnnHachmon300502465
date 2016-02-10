@@ -184,7 +184,7 @@ public class AnalyzerTask {
 	private String fetchImageLength(){
 		String link = m_images.pop();
 		try {
-			String response = HTTPHandler.sendHttpHeadRequest(link);
+			String response = HTTPQuery.sendHttpHeadRequest(link);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
