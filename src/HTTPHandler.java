@@ -10,7 +10,7 @@ import java.net.UnknownHostException;
 public class HTTPHandler {
 	final static String _CRLF = "\r\n";
 	
-	public static String[] sendHttpRequest(String target, String requestType){
+	public static String[] sendHttpRequest(String target, String requestType) throws IOException, UnknownHostException{
 		String res[] = new String[2];
 		String response = "";
 		boolean fetchContent = requestType.equals("GET");
@@ -61,8 +61,10 @@ public class HTTPHandler {
 			
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
+			throw new UnknownHostException();
 		} catch (IOException e) {
 			e.printStackTrace();
+			throw new IOException();
 		}
 		return res;
 	}
@@ -114,13 +116,43 @@ public class HTTPHandler {
 		
 		return new String[]{m_FullRequest, m_messageBodyString};
 	}
+	
+	
+	private static String parseHttpHeadResponse(String response){
+		String[] responseLines = response.split("\n");
+		String _contentLength = "Content-Length: ";
+		String _contentType = "Content-Type: ";
+		String _seperator = "#_#@#_#";
+		
+		String lengthValue = "";
+		String typeValue = "";
+		
+		for(int i = 0; i < responseLines.length; i++){
+			String line = responseLines[i];
+			if(line.indexOf(_contentLength) > -1 && line.indexOf(" ") > -1){
+				lengthValue = (line.split(" "))[1];
+			}
+			else if(line.indexOf(_contentType) > -1 && line.indexOf(" ") > -1){
+				typeValue = (line.split(" "))[1];
+			}
+		}
+		
+		return lengthValue + _seperator + typeValue;
+	}
 
+	public static String sendHttpHeadRequestAndGetTypeAndLengthFromResponse(String target){
+		String response = sendHttpRequest(target, "HEAD")[0];
+		String lengthAndType = parseHttpHeadResponse(response);
+		return lengthAndType;
+	}
+	
+	
 	/**
 	 * 
 	 * @param target : link to communicate with
 	 * @return Response
 	 */
-	public static String sendHttpHeadRequest(String target){
+	public static String sendHttpHeadRequest(String target) throws IOException, UnknownHostException{
 		return (sendHttpRequest(target, "HEAD"))[0];
 	}
 	
@@ -129,7 +161,7 @@ public class HTTPHandler {
 	 * @param target : link to communicate with
 	 * @return String Array -> [Response, Response-Mesaage-Body]
 	 */
-	public static String[] sendHttpGetRequest(String target){
+	public static String[] sendHttpGetRequest(String target) throws IOException, UnknownHostException{
 		return sendHttpRequest(target, "GET");
 	}
 

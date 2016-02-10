@@ -9,6 +9,8 @@ import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.LinkedList;
 
+import javax.xml.ws.spi.http.HttpHandler;
+
 public class AnalyzerTask {
 
 	LinkedList<String> m_anchors;
@@ -177,6 +179,15 @@ public class AnalyzerTask {
 	
 	private String removeQuoteCharFromString(String str){
 		return str.substring(1, str.length());
+	}
+	
+	private String fetchImageLength(){
+		String link = m_images.pop();
+		try {
+			String response = HTTPHandler.sendHttpHeadRequest(link);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 }
