@@ -188,6 +188,8 @@ public class AnalyzerTask {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		return null;
 	}
 
 }

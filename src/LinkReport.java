@@ -21,5 +21,8 @@ public class LinkReport {
 		m_documents = new LinkedList<>();
 		m_htmls = new LinkedList<>();
 	}
+	
+	
+	//public void addImageLink(){}
 
 }
