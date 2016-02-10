@@ -8,9 +8,10 @@ import java.net.URL;
 import java.net.UnknownHostException;
 
 public class HTTPQuery {
-	final static String _CRLF = "\r\n";
 	
-	public static String[] sendHttpRequest(String target, String requestType) throws IOException, UnknownHostException{
+	final String _CRLF = "\r\n";
+	
+	private String[] sendHttpRequest(String target, String requestType) throws IOException, UnknownHostException{
 		String res[] = new String[2];
 		String response = "";
 		boolean fetchContent = requestType.equals("GET");
@@ -69,7 +70,7 @@ public class HTTPQuery {
 		return res;
 	}
 	//TODO: check if we can make it to one method instead of 2
-	public static String[] readHttpResponse(Socket connection) throws IOException{
+	public String[] readHttpResponse(Socket connection) throws IOException{
 		String ContentLengthHeader = "Content-Length: ";
 		int contentLength = -1;
 		String m_FullRequest = "";
@@ -119,7 +120,7 @@ public class HTTPQuery {
 	
 	
 	
-	private static String parseHttpHeadResponse(String response){
+	private String parseHttpHeadResponse(String response){
 		String[] responseLines = response.split("\n");
 		String _contentLength = "Content-Length: ";
 		String _contentType = "Content-Type: ";
@@ -144,7 +145,7 @@ public class HTTPQuery {
 	// <img src="www.ynet.co.il/image/logo_2.png ...>
 	//
 	//
-	public static String sendHttpHeadRequestAndGetTypeAndLengthFromResponse(String target) throws UnknownHostException, IOException{
+	public String sendHttpHeadRequestAndGetTypeAndLengthFromResponse(String target) throws UnknownHostException, IOException{
 		String response = sendHttpRequest(target, "HEAD")[0];
 		String lengthAndType = parseHttpHeadResponse(response);
 		return lengthAndType;
@@ -156,7 +157,7 @@ public class HTTPQuery {
 	 * @param target : link to communicate with
 	 * @return Response
 	 */
-	public static String sendHttpHeadRequest(String target) throws IOException, UnknownHostException{
+	public String sendHttpHeadRequest(String target) throws IOException, UnknownHostException{
 		return (sendHttpRequest(target, "HEAD"))[0];
 	}
 	
@@ -165,7 +166,7 @@ public class HTTPQuery {
 	 * @param target : link to communicate with
 	 * @return String Array -> [Response, Response-Mesaage-Body]
 	 */
-	public static String[] sendHttpGetRequest(String target) throws IOException, UnknownHostException{
+	public String[] sendHttpGetRequest(String target) throws IOException, UnknownHostException{
 		return sendHttpRequest(target, "GET");
 	}
 

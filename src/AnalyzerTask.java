@@ -11,7 +11,7 @@ import java.util.LinkedList;
 
 import javax.xml.ws.spi.http.HttpHandler;
 
-public class AnalyzerTask {
+public class AnalyzerTask implements Runnable {
 
 	LinkedList<String> m_anchors;
 	LinkedList<String> m_images;
@@ -24,12 +24,12 @@ public class AnalyzerTask {
 	
 	String m_htmlSourceCode;
 
-	public AnalyzerTask(String i_htmlSourceCode, LinkedList<String> allowedImageExt, LinkedList<String> allowedVideoExt, LinkedList<String> allowedDocExt){
+	public AnalyzerTask(String i_htmlSourceCode){
 		m_htmlSourceCode = i_htmlSourceCode;
 		
-		m_allowedImageExt = allowedImageExt;
-		m_allowedVideoExt = allowedVideoExt;
-		m_allowedDocExt = allowedDocExt;
+		//m_allowedImageExt = allowedImageExt;
+		//m_allowedVideoExt = allowedVideoExt;
+		//m_allowedDocExt = allowedDocExt;
 		
 		m_anchors = new LinkedList<>();
 		m_images = new LinkedList<>();
@@ -190,6 +190,12 @@ public class AnalyzerTask {
 		}
 		
 		return null;
+	}
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
