@@ -3,13 +3,12 @@ import java.util.LinkedList;
 public class SynchronizedQueueLL {
 	
 	private LinkedList<Runnable> m_buffer;
-	private int m_producers;
+	private int m_size;
 	
 	public SynchronizedQueueLL() {
 		// TODO Auto-generated constructor stub
 		m_buffer = new LinkedList<Runnable>();
 		// TODO: Maybe to delete, depends if producers is needed...??
-		m_producers = 0;
 	}
 	
 	// dequeue operation
@@ -18,7 +17,7 @@ public class SynchronizedQueueLL {
 		// in case the queue is empty
 		while (m_buffer.isEmpty())
 		{
-			if (m_buffer.isEmpty() && m_producers == 0)
+			if (m_buffer.isEmpty() && m_size == 0)
 			{
 				return null;
 			}
@@ -50,6 +49,10 @@ public class SynchronizedQueueLL {
 	// return the number of items in queue
 	public synchronized int getCapacity() {
 		return m_buffer.size();
+	}
+	
+	public synchronized boolean isEmpty() {
+		return m_buffer.isEmpty();
 	}
 	
 	

@@ -9,6 +9,9 @@ public class ThreadPoolV1 {
 	SynchronizedQueueLL m_UrlsToDownloadQueue;
 	int m_NumOfDownloaders;
 	
+	private static int m_Counter;
+	private boolean m_isFinished;
+	
 	// create task queue for analyzers
 	SynchronizedQueueLL m_HtmlToAnalyzeQueue;
 	int m_NumOfAnalyzers;
@@ -22,7 +25,8 @@ public class ThreadPoolV1 {
 		
 		// create and start the workers to be ready to get tasks
 		m_NumOfDownloaders = i_NumOfDownloaders;
-		m_DownloadersWorkersThreads = new WorkerT[m_NumOfDownloaders];		
+		m_DownloadersWorkersThreads = new WorkerT[m_NumOfDownloaders];	
+		
 		for (WorkerT thread : m_DownloadersWorkersThreads) {
 			thread = new WorkerT(m_UrlsToDownloadQueue);
 			thread.start();
@@ -30,10 +34,13 @@ public class ThreadPoolV1 {
 		
 		m_NumOfAnalyzers = i_NumOfAnalyzers;
 		m_AnalyzersWorkersThreads = new WorkerT[m_NumOfAnalyzers];
+		
 		for (WorkerT worker : m_AnalyzersWorkersThreads) {
 			worker = new WorkerT(m_HtmlToAnalyzeQueue);
 			worker.start();
-		}	
+		}
+		
+		m_Counter = 0;
 	}
 	
 	//TODO: test for handling webSRV regular Requests
@@ -53,6 +60,7 @@ public class ThreadPoolV1 {
 	public void putTaskInDownloaderQueue(Runnable task) {
 		synchronized (m_UrlsToDownloadQueue) {
 			m_UrlsToDownloadQueue.enqueue(task);
+			m_Counter++;
 		}
 	}
 	
@@ -61,6 +69,26 @@ public class ThreadPoolV1 {
 		synchronized (m_HtmlToAnalyzeQueue) {
 			m_HtmlToAnalyzeQueue.enqueue(task);
 		}
+	}
+	
+	public static synchronized void counterMinus() {
+		m_Counter--;
+	}
+	
+	public static synchronized int getCounter() {
+		return m_Counter;
+	}
+	
+	public synchronized boolean isFinished() {
+		boolean res = false;
+		int report = 0;
+		if (m_Counter == report
+				&& m_UrlsToDownloadQueue.isEmpty() 
+				&& m_HtmlToAnalyzeQueue.isEmpty()) {
+			res = true;
+			
+		}
+		return res;
 	}
 	
 }

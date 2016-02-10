@@ -17,6 +17,7 @@ public class WorkerT extends Thread {
 				if (m_tasks.getCapacity() == 0) {
 					try {
 						m_tasks.wait();
+						
 					} catch (InterruptedException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -25,7 +26,7 @@ public class WorkerT extends Thread {
 				taskToExecute = (Runnable) m_tasks.dequeue();
 			}
 			try {
-				taskToExecute.run();				
+				taskToExecute.run();
 			} catch(Exception e) {
 				System.err.println("ERROR: Thread Failed Running");
 			}
