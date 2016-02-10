@@ -67,7 +67,7 @@ public class HTTPHandler {
 		return res;
 	}
 	
-	public static String[] readHttpResponse(Socket connection) {
+	public static String[] readHttpResponse(Socket connection) throws IOException{
 		String ContentLengthHeader = "Content-Length: ";
 		int contentLength = -1;
 		String m_FullRequest = "";
@@ -109,6 +109,7 @@ public class HTTPHandler {
 
 		} catch (IOException e) {
 			System.err.println("ERROR: IO Exception");
+			throw new IOException();
 		}
 		
 		return new String[]{m_FullRequest, m_messageBodyString};
