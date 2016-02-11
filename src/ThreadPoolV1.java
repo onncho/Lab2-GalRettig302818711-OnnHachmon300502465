@@ -1,3 +1,4 @@
+import java.util.HashMap;
 import java.util.LinkedList;
 
 public class ThreadPoolV1 {
@@ -10,7 +11,7 @@ public class ThreadPoolV1 {
 	SynchronizedQueueLL m_UrlsToDownloadQueue;
 	int m_NumOfDownloaders;
 
-	private static int m_DownloaderCounter;
+	private int m_DownloaderCounter;
 	
 	// create task queue for analyzers
 	SynchronizedQueueLL m_HtmlToAnalyzeQueue;
@@ -21,6 +22,10 @@ public class ThreadPoolV1 {
 	LinkedList<String> m_AnalyzedNonInternalLinks;//external/internal imgs/videos/docs and external pages
 
 	LinkedList<LinkReport> m_reports;
+	
+	HashMap<String, LinkReport> m_linksDB;
+	
+	
 
 	public ThreadPoolV1(SynchronizedQueueLL i_UrlsToDownload, int i_NumOfDownloaders,
 			SynchronizedQueueLL i_HtmlsToAnalyze, int i_NumOfAnalyzers) {
@@ -51,6 +56,8 @@ public class ThreadPoolV1 {
 
 		m_DownloaderCounter = 0;
 		m_ReportsCounter = 0;
+		
+		m_linksDB = new HashMap<>();
 	}
 
 	// TODO: maybe change names to generic names. because we activate the webSRV from here also
@@ -69,7 +76,6 @@ public class ThreadPoolV1 {
 	public void putTaskInDownloaderQueue(Runnable task) {
 		synchronized (m_UrlsToDownloadQueue) {
 			m_UrlsToDownloadQueue.enqueue(task);
-			m_DownloaderCounter++;
 		}
 	}
 
@@ -87,25 +93,36 @@ public class ThreadPoolV1 {
 		}
 	}
 
-	public static synchronized void counterMinus() {
+	public synchronized void counterMinus() {
 		m_DownloaderCounter--;
 	}
 
-	public static synchronized int getCounter() {
+	public synchronized int getCounter() {
 		return m_DownloaderCounter;
 	}
 
 	public synchronized void reportCounterPlus() {
 		m_ReportsCounter++;
 	}
+	
+	public synchronized void downloaderCounterPlus() {
+		m_DownloaderCounter++;
+	}
 
-	public synchronized void addReportAndCheckIfFinished(LinkReport i_report) {
+	public synchronized void addReportAndCheckIfFinished(LinkReport i_report, String url) {
 
 		// add report after analysis to the list
 		if (i_report != null) {
 			LinkReport report = i_report;
 			m_reports.addLast(report);	
 			reportCounterPlus();
+			
+			//TODO: del
+			if (m_linksDB.containsKey(url)) {
+				if (m_linksDB.get(url) == null) {
+					m_linksDB.replace(url, i_report);
+				}
+			}
 		}
 		
 		if (isFinished()) {
@@ -117,6 +134,15 @@ public class ThreadPoolV1 {
 	// check if all tasks are finished
 	public synchronized boolean isFinished() {
 		boolean res = false;
+		//TODO: del
+		if (m_UrlsToDownloadQueue.isEmpty() 
+				&& m_HtmlToAnalyzeQueue.isEmpty()) {
+			for (String k : m_linksDB.keySet()) {
+				if (m_linksDB.get(k) == null) {
+					System.out.println("@@@@@@@@@@@@@@@@@@@@@ MISSING " + k + " @@@@@@@@@@@@@@@");
+				}
+			}
+		}
 
 		// check if all tasks are finished
 		if (m_DownloaderCounter == m_ReportsCounter
@@ -124,7 +150,10 @@ public class ThreadPoolV1 {
 				&& m_HtmlToAnalyzeQueue.isEmpty()) {
 			res = true;
 		}
-
+		
+		System.out.println("####################### Downloader Counter: " + m_DownloaderCounter + "#######################" );
+		System.out.println("####################### Report Counter: " + m_ReportsCounter + "#######################" );
+		
 		return res;
 	}
 
@@ -132,6 +161,9 @@ public class ThreadPoolV1 {
 		if (i_urlToDowbload != null) {
 			m_DownloadedLinks.addLast(i_urlToDowbload);		
 			System.out.println("**************" + i_urlToDowbload + "****************");
+			//TODO: del
+			m_linksDB.put(i_urlToDowbload, null);
+			
 		}
 	}
 

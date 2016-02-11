@@ -69,7 +69,7 @@ public class AnalyzerTask implements Runnable {
 			m_threadPool.putTaskInDownloaderQueue((Runnable) downloader);
 		}
 		
-		m_threadPool.addReportAndCheckIfFinished(m_report);
+		m_threadPool.addReportAndCheckIfFinished(m_report, m_report.m_pageAddress);
 	}
 
 	private LinkedList<String> getInternalAnchors() {

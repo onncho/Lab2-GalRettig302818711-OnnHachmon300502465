@@ -22,14 +22,21 @@ public class Downloader implements Runnable {
 
 			if (!m_threadPool.containsUrlInList(m_UrlToDownload)) {
 				
-				m_threadPool.addToDownloadedList(m_UrlToDownload);
-				
 				m_DownloadedHtmlWithBody = m_QuerySite.sendHttpGetRequest(m_UrlToDownload);
 				
-				//TODO: Debug 
-				System.out.println("site has been downloaded ****");
-
-				if (m_DownloadedHtmlWithBody != null) {
+				//System.out.println("$$$$$$$$$$$$$$$$$$$$" + "Reponse For Downloader" + "\n" + m_DownloadedHtmlWithBody[0] + "$$$$$$$$$$$$$$$");
+				
+				// crawling only the 200 ok links.
+				// TODO: deals with 301
+				String response = m_DownloadedHtmlWithBody[0];
+				boolean flagForResponse = response.contains("200 OK");
+				
+				
+				if (flagForResponse) {
+					
+					m_threadPool.addToDownloadedList(m_UrlToDownload);
+					
+					m_threadPool.downloaderCounterPlus();
 					
 					String body = m_DownloadedHtmlWithBody[1];
 

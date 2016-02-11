@@ -54,6 +54,13 @@ public class Crawler {
 		
 		m_Downloader = new Downloader(m_threadPool, m_DomainToCrawl);
 		m_threadPool.putTaskInDownloaderQueue((Runnable) m_Downloader);
+		
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 
 		// check every 2000 msec if the crawling still running
 		while (m_CrawlingRunning) {
@@ -64,6 +71,8 @@ public class Crawler {
 				e.printStackTrace();
 			}
 		}
+		
+		System.out.println("Finished Crawling!!!!!!!!@!@!@!@!@!@");
 				
 		// analysis ends 
 		createFinalReport();
