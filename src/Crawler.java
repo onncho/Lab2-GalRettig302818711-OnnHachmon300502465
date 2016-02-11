@@ -1,3 +1,4 @@
+import java.util.LinkedList;
 
 public class Crawler {
 
@@ -7,8 +8,9 @@ public class Crawler {
 	int m_NumOfDownloaders;
 	int m_NumOfAnalyzers;
 	String m_DomainToCrawl;
-	// 
-	
+	Downloader m_Downloader;
+
+	// TODO: Need to receive parameters 
 	public Crawler(String i_DomainToCrawl) {
 		// TODO Auto-generated constructor stub
 		m_NumOfDownloaders = Integer.parseInt(ConfigurationObject.getMaxDownloaders());
@@ -18,8 +20,19 @@ public class Crawler {
 		m_threadPool = new ThreadPoolV1(m_UrlsQueueToDownload, m_NumOfDownloaders, 
 				m_HtmlsQueueToAnalyze, m_NumOfAnalyzers);
 		
-		//Runnable === Task (Downloading...)
-		HTTPRequest run = new HTTPRequest("get", "body", 425);
-		m_threadPool.putTaskInDownloaderQueue((Runnable) run);
+		startCrawling();
+		
 	}
+
+	private void startCrawling() {
+		// TODO Auto-generated method stub
+		
+		// if port scan V -> DO First
+		
+		// if robots -> do something 
+		
+		m_Downloader = new Downloader(m_threadPool, m_DomainToCrawl);
+		m_threadPool.putTaskInDownloaderQueue((Runnable) m_Downloader);
+	}
+
 }

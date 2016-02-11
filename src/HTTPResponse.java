@@ -188,7 +188,7 @@ public class HTTPResponse {
 			{
 				if(!v_isChunked){
 					if(file.getName().equals("params_info.html")){
-						templatedHTML = HTMLTemplater.templateHTML(file,m_HttpRequestParams);
+						templatedHTML = HTMLTemplater.templateHTML(file, m_HttpRequestParams);
 						m_ContentLength = (int) templatedHTML.length;
 					} else {
 						m_ContentLength = (int) file.length();
@@ -197,7 +197,7 @@ public class HTTPResponse {
 				} else if(file.getName().equals("params_info.html") && v_isChunked){
 
 					//if for a weird reason the client want the page in chunks we still need to template it
-					templatedHTML = HTMLTemplater.templateHTML(file,m_HttpRequestParams);
+					templatedHTML = HTMLTemplater.templateHTML(file, m_HttpRequestParams);
 				}
 
 				m_PathTofile = pathname;

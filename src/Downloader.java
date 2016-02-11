@@ -26,6 +26,7 @@ public class Downloader implements Runnable {
 				String body = m_DownloadedHtmlWithBody[1];
 				m_AnalyzerTask = new AnalyzerTask(body, m_threadPool);
 				m_threadPool.putTaskInAnalyzersQueue((Runnable) m_AnalyzerTask);
+				
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
