@@ -2,17 +2,20 @@ import java.util.LinkedList;
 
 public class LinkReport {
 	
-	LinkedList<Link> m_images;
+	LinkedList<Link> m_images;//amount
 	LinkedList<Link> m_videos;
-	LinkedList<Link> m_htmls;
+	LinkedList<Link> m_externalHtmls;
+	LinkedList<Link> m_internalHtmls;
 	LinkedList<Link> m_documents;
 	
-	int m_imagesTotalSize;
+	int m_imagesTotalSize;//size in bytes
 	int m_videosTotalSize;
 	int m_documentsTotalSize;
-	int m_pagesTotalSize;
+	int m_externalPagesTotalSize;
 	
 	String m_pageAddress;
+	
+	//the size of this internal page 
 	int m_sizeOfPageInBytes;
 	
 	public LinkReport(String i_pageAddress, int i_size){
@@ -22,16 +25,17 @@ public class LinkReport {
 		m_images = new LinkedList<>();
 		m_videos = new LinkedList<>();
 		m_documents = new LinkedList<>();
-		m_htmls = new LinkedList<>();
+		m_externalHtmls = new LinkedList<>();
+		m_internalHtmls = new LinkedList<>();
 		
 		m_imagesTotalSize = 0;
 		m_videosTotalSize = 0;
 		m_documentsTotalSize = 0;
-		m_pagesTotalSize = 0;
+		m_externalPagesTotalSize = 0;
 		
 	}
 	
-	public int getSizeOfPage(){
+	public int getSizeOfThisPageInBytes(){
 		return m_sizeOfPageInBytes;
 	}
 	
@@ -70,15 +74,38 @@ public class LinkReport {
 		}
 	}
 	
-	public void addPageLink(Link link){
-		boolean elementExists = listContains(m_htmls, link);
+	public void addInternalPageLink(Link link){
+		boolean elementExists = listContains(m_internalHtmls, link);
 		if(!elementExists){
-			m_htmls.push(link);
-			m_pagesTotalSize += link.getLengthInBytes();
+			m_internalHtmls.push(link);
+		}
+	}
+	
+	public void addExternalPageLink(Link link){
+		boolean elementExists = listContains(m_externalHtmls, link);
+		if(!elementExists){
+			m_externalHtmls.push(link);
+			m_externalPagesTotalSize += link.getLengthInBytes();
 		}
 	}
 
 
+	
+	public int amountOfImages(){
+		return m_images.size();
+	}
+	public int amountOfVideos(){
+		return m_videos.size();
+	}
+	public int amountOfDocuments(){
+		return m_documents.size();
+	}
+	public int amountOfExternalPages(){
+		return m_externalHtmls.size();
+	}
+	
+	
+	
 	public LinkedList<Link> getM_images() {
 		return m_images;
 	}
@@ -90,7 +117,7 @@ public class LinkReport {
 
 
 	public LinkedList<Link> getM_htmls() {
-		return m_htmls;
+		return m_externalHtmls;
 	}
 
 
@@ -115,7 +142,7 @@ public class LinkReport {
 
 
 	public int getM_pagesTotalSize() {
-		return m_pagesTotalSize;
+		return m_externalPagesTotalSize;
 	}
 
 
