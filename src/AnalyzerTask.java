@@ -229,16 +229,61 @@ public class AnalyzerTask implements Runnable {
 	private String removeQuoteCharFromString(String str){
 		return str.substring(1, str.length());
 	}
+
+	/**
+	 * @TODO pages in links, are going to be downloaded anyway and will have own reports
+	 * @param list to pop link from
+	 * @param listIdentifier - 0 image , 1 videos , 2 documents, 3 pages
+	 */
+	private void fetchAllFromList(LinkedList<String> list, int listIdentifier){
+		for(int i = 0; i < list.size(); i++){
+			String address = list.get(i);
+			String extension = getExtensionFromString(address);
+			if(address != null && extension != null){
+				Link link = createLink(address, extension);
+				
+				if(link != null){
+					if(i == 0){
+						m_report.addImageLink(link);
+					}
+					else if(i == 1){
+						m_report.addVideoLink(link);
+					}
+					else if(i == 2){
+						m_report.addDocumentLink(link);
+					}
+					/*else if(i == 3){
+						m_report.addPageLink(link);
+					}*/
+					
+					
+				} else {
+					System.out.println("failed on fetching image -> link = " + address);
+				}
+				
+			} else {
+				System.out.println("fetching an image failed on getting address or extension on index = " + i);
+			}
+			
+		}
+	}
 	
-	private g fetchLinkData(){
-		String link = m_images.pop();
+	
+	
+	}
+	
+	private Link createLink(String linkAddress, String extension){
+		Link link = null;
 		try {
-			String typeAndLength = query.sendHttpHeadRequestAndGetTypeAndLengthFromResponse(link);
+			String typeAndLength[] = query.sendHttpHeadRequestAndGetTypeAndLengthFromResponse(linkAddress).split("#_#@#_#");
+			String type = typeAndLength[0];
+			String length = typeAndLength[1];
+			link = new Link(linkAddress, extension, type, length);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
-		return null;
+		return link;
 	}
 
 	
