@@ -15,6 +15,8 @@ public class Crawler {
 	CrawlerReport m_FinalReport;
 	boolean m_RobotsChecked;
 	boolean m_PortScannerChecked;
+	
+	boolean m_CrawlingRunning;
 
 	// TODO: Need to receive parameters 
 	public Crawler(String i_DomainToCrawl, boolean i_RobotsChecked, boolean i_PortScanChecked) {
@@ -32,13 +34,13 @@ public class Crawler {
 		m_threadPool.setRefernceToReports(m_Reports);
 		m_RobotsChecked = i_RobotsChecked;
 		m_PortScannerChecked = i_PortScanChecked;
+		m_CrawlingRunning = true;
 		
 		// start
 		//startCrawling();
 	}
 
 	public void startCrawling() {
-		// TODO Auto-generated method stub
 		
 		// if port scan V -> DO First
 		if (m_PortScannerChecked) {
@@ -53,6 +55,18 @@ public class Crawler {
 		
 		m_Downloader = new Downloader(m_threadPool, m_DomainToCrawl);
 		m_threadPool.putTaskInDownloaderQueue((Runnable) m_Downloader);
+
+		// check every 2000 msec if the crawling still running
+		while (m_CrawlingRunning) {
+			try {
+				Thread.sleep(2000);
+				m_CrawlingRunning = !m_threadPool.isFinished();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
 		
 		/*
 		// wait for the analyzers to finish creating reports
@@ -63,8 +77,9 @@ public class Crawler {
 			e.printStackTrace();
 		}
 		*/
+		
 		// analysis ends 
-		//createFinalReport();
+		createFinalReport();
 		System.out.println("Exit Crawler Class");
 	}
 
