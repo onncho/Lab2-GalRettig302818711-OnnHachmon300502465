@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.net.URISyntaxException;
 
 public class Downloader implements Runnable {
 
@@ -24,7 +25,12 @@ public class Downloader implements Runnable {
 			// TODO: check if the download succeed
 			if (m_DownloadedHtmlWithBody != null) {
 				String body = m_DownloadedHtmlWithBody[1];
-				m_AnalyzerTask = new AnalyzerTask(body, m_threadPool);
+				try {
+					m_AnalyzerTask = new AnalyzerTask(body, m_threadPool, m_UrlToDownload);
+				} catch (URISyntaxException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				m_threadPool.putTaskInAnalyzersQueue((Runnable) m_AnalyzerTask);
 				
 			}

@@ -31,6 +31,7 @@ public class CrawlerReport {
 	
 	boolean v_robotsTxtRespected;
 	LinkedList<String> m_openedPorts;// if was not requested will be null
+	LinkedList<LinkReport> m_ReportsNotProcess;
 	
 	public CrawlerReport(boolean i_robotsTxtRespected, String i_startPageAddress){
 		v_robotsTxtRespected = i_robotsTxtRespected;
@@ -93,7 +94,10 @@ public class CrawlerReport {
 		}
 	}
 	
+	public void reportsToProcess(LinkedList<LinkReport> i_reportsNotProcess) {
 	
-	
-	
+		if (i_reportsNotProcess != null) {			
+			m_ReportsNotProcess = i_reportsNotProcess;
+		}
+	}
 }

@@ -1,157 +1,172 @@
-    <html>
-        <head>
-            <title>Web Crawler</title>
-             <meta charset="utf-8">
-            <meta http-equiv="X-UA-Compatible" content="IE=edge">
-            <meta name="viewport" content="width=device-width, initial-scale=1">
-            <link rel="shortcut icon" type="image/png" href="/rocket.png"/>
+<html>
+    <head>
+        <title>Web Crawler</title>
+         <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="shortcut icon" type="image/png" href="/rocket.png"/>
 
-            <style type="text/css">
-                body {
-                    width: 100%;
-                    padding: 0;
-                    margin: 0;
-                }
+        <style type="text/css">
+            body {
+                width: 100%;
+                padding: 0;
+                margin: 0;
+            }
 
-                .container {
-                    width: 80%;
-                    margin: 5%;
-                    margin-top: 5%;
-                    margin-bottom: 3%;
-                    text-align: center;
-                }
+            .container {
+                width: 80%;
+                margin: 5%;
+                margin-top: 5%;
+                margin-bottom: 3%;
+                text-align: center;
+            }
 
-                h1 {
-                    color: #5cb85c;
-                    position: fixed;
-                    margin-left: -10%;
-                    margin-top: -5%;
-                    width: 100%;
-                    background: #eee;
-                    height: 60px;
-                }
+            h1 {
+                color: #5cb85c;
+                position: fixed;
+                margin-left: -10%;
+                margin-top: -5%;
+                width: 100%;
+                background: #eee;
+                height: 60px;
+            }
 
-                h2 {
-                    color: #337ab7;
-                }
+            h2 {
+                color: #337ab7;
+            }
 
-                p {
-                    color: #333333;
-                    font-family: ‘Courier New’, Courier, monospace;
-                    font-size: 15px;
-                }
+            p {
+                color: #333333;
+                font-family: ‘Courier New’, Courier, monospace;
+                font-size: 15px;
+            }
 
-                a {
-                    color: #337ab7;
-                }
+            a {
+                color: #337ab7;
+            }
 
-                img {
-                    width: 15%;
-                    height: 15%;
-                    margin: 1%;
-                }
+            img {
+                width: 15%;
+                height: 15%;
+                margin: 1%;
+            }
 
-                hr {
-                    border-color: #337ab7;
-                }
-
-                .form-style {
-                    margin:10px auto;
-                    max-width: 400px;
-                    padding: 20px 12px 10px 20px;
-                    font: 13px "Lucida Sans Unicode", "Lucida Grande", sans-serif;
-                }
-                .form-style li {
-                    padding: 0;
-                    display: block;
+            hr {
+                border-color: #337ab7;
+            }
+            
+            ul  {
                     list-style: none;
-                    margin: 10px 0 0 0;
-                }
-                .form-style label{
-                    margin:0 0 3px 0;
-                    padding:0px;
-                    display:block;
-                    font-weight: bold;
-                }
-                .form-style input[type=text], 
-                textarea {
-                    box-sizing: border-box;
-                    -webkit-box-sizing: border-box;
-                    -moz-box-sizing: border-box;
                     border:1px solid #BEBEBE;
-                    padding: 7px;
-                    margin:0px;
-                    -webkit-transition: all 0.30s ease-in-out;
-                    -moz-transition: all 0.30s ease-in-out;
-                    -ms-transition: all 0.30s ease-in-out;
-                    -o-transition: all 0.30s ease-in-out;
-                    outline: none;  
-                }
-                
-                .form-style input[type=text]:focus, 
-                .form-style textarea:focus {
-                    -moz-box-shadow: 0 0 8px #88D5E9;
-                    -webkit-box-shadow: 0 0 8px #88D5E9;
-                    box-shadow: 0 0 8px #88D5E9;
-                    border: 1px solid #88D5E9;
-                }
-                .form-style .field-divided{
-                    width: 50%;
+                    padding: 15px;
+
                 }
 
-                .form-style .field-long{
-                    width: 100%;
-                }
-                
-                .form-style input[type=submit] {
-                    background: #337ab7;
-                    padding: 8px 15px 8px 15px;
-                    border: none;
-                    color: #fff;
-                }
-                .form-style input[type=submit]:hover {
-                    background: #4691A4;
-                    box-shadow:none;
-                    -moz-box-shadow:none;
-                    -webkit-box-shadow:none;
-                }
+            li {
+                margin: 10px;
+                color: #333333;
+                font-family: ‘Courier New’, Courier, monospace;
+                font-size: 15px;
+                padding: 5px;
+                width: 60px;
+            }
 
+            .form-style {
+                margin:10px auto;
+                max-width: 400px;
+                padding: 20px 12px 10px 20px;
+                font: 13px "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+            }
+            .form-style li {
+                padding: 0;
+                display: block;
+                list-style: none;
+                margin: 10px 0 0 0;
+            }
+            .form-style label{
+                margin:0 0 3px 0;
+                padding:0px;
+                display:block;
+                font-weight: bold;
+            }
+            .form-style input[type=text], 
+            textarea {
+                box-sizing: border-box;
+                -webkit-box-sizing: border-box;
+                -moz-box-sizing: border-box;
+                border:1px solid #BEBEBE;
+                padding: 7px;
+                margin:0px;
+                -webkit-transition: all 0.30s ease-in-out;
+                -moz-transition: all 0.30s ease-in-out;
+                -ms-transition: all 0.30s ease-in-out;
+                -o-transition: all 0.30s ease-in-out;
+                outline: none;  
+            }
 
-            </style>
-        </head>
-        <body>
+            .form-style input[type=text]:focus, 
+            .form-style textarea:focus {
+                -moz-box-shadow: 0 0 8px #88D5E9;
+                -webkit-box-shadow: 0 0 8px #88D5E9;
+                box-shadow: 0 0 8px #88D5E9;
+                border: 1px solid #88D5E9;
+            }
+            .form-style .field-divided{
+                width: 50%;
+            }
 
-            <div class="container">
-                <!-- Fixed Title -->
-                <h2>Lab2 - Web Crawler</h2>
-            </div>
+            .form-style .field-long{
+                width: 100%;
+            }
 
-            <!-- Horizontal line -->
-            <hr>
+            .form-style input[type=submit] {
+                background: #337ab7;
+                padding: 8px 15px 8px 15px;
+                border: none;
+                color: #fff;
+            }
+            .form-style input[type=submit]:hover {
+                background: #4691A4;
+                box-shadow:none;
+                -moz-box-shadow:none;
+                -webkit-box-shadow:none;
+            }
 
-            <div class="container">
+        </style>
+    </head>
+    <body>
 
-                <!-- Form containing : Sender, Receiver, Subject, Message Field, and Submit bottom. -->
-                <form method = "POST" action = "/params_info.html">
-                    <a name="myForm">
-                    <ul class="form-style">
-                    <li>
-                        <label>Domain Name</label>
-                        <input type="text" name="sender" class="field-divided" placeholder="Sender"                     />
-                    </li>
-                    <li>
-                         <input type="checkbox" name="PortScanChecked" class="field-devided" value="Checked"> Perform full TCP port scan
-                    </li>
-                         <li>
-                         <input type="checkbox" name="RobotsChecked" class="field-devided" value="Checked"> disrespect robots.txt
-                    </li>
-                        
-                    <li>
-                        <input type="submit" value="Submit" />
-                    </li>
-                    </ul>
-                    </a>
-                </form>
-            </div>
-        </body>
-    </html>
+        <div class="container">
+            <!-- Fixed Title -->
+            <h2>Lab2 - Web Crawler</h2>
+        </div>
+
+        <!-- Horizontal line -->
+        <hr>
+
+        <div class="container">
+
+            <!-- Form containing : Sender, Receiver, Subject, Message Field, and Submit bottom. -->
+            <form method = "POST" action = "/params_info.html">
+                <a name="myForm">
+                <ul class="form-style">
+                <li>
+                    <label>Domain Name</label>
+                    <input type="text" name="sender" class="field-divided" placeholder="Sender"                     />
+                </li>
+                <li>
+                     <input type="checkbox" name="PortScanChecked" class="field-devided" value="Checked"> Perform full TCP port scan
+                </li>
+                     <li>
+                     <input type="checkbox" name="RobotsChecked" class="field-devided" value="Checked"> disrespect robots.txt
+                </li>
+
+                <li>
+                    <input type="submit" value="Submit" />
+                </li>
+                </ul>
+                </a>
+            </form>
+        </div>
+    </body>
+</html>

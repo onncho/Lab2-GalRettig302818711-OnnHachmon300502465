@@ -1,3 +1,4 @@
+import java.util.LinkedList;
 
 public class ThreadPoolV1 {
 	
@@ -9,12 +10,16 @@ public class ThreadPoolV1 {
 	SynchronizedQueueLL m_UrlsToDownloadQueue;
 	int m_NumOfDownloaders;
 	
-	private static int m_Counter;
+	private static int m_DownloaderCounter;
+	//TODO: to delelte
 	private boolean m_isFinished;
 	
 	// create task queue for analyzers
 	SynchronizedQueueLL m_HtmlToAnalyzeQueue;
 	int m_NumOfAnalyzers;
+	int m_ReportsCounter;
+	
+	LinkedList<LinkReport> m_reports;
 	
 	public ThreadPoolV1(SynchronizedQueueLL i_UrlsToDownload, int i_NumOfDownloaders,
 							 SynchronizedQueueLL i_HtmlsToAnalyze, int i_NumOfAnalyzers) {
@@ -40,7 +45,8 @@ public class ThreadPoolV1 {
 			worker.start();
 		}
 		
-		m_Counter = 0;
+		m_DownloaderCounter = 0;
+		m_ReportsCounter = 0;
 	}
 	
 	//TODO: test for handling webSRV regular Requests
@@ -60,7 +66,7 @@ public class ThreadPoolV1 {
 	public void putTaskInDownloaderQueue(Runnable task) {
 		synchronized (m_UrlsToDownloadQueue) {
 			m_UrlsToDownloadQueue.enqueue(task);
-			m_Counter++;
+			m_DownloaderCounter++;
 		}
 	}
 	
@@ -71,24 +77,42 @@ public class ThreadPoolV1 {
 		}
 	}
 	
+	public void setRefernceToReports(LinkedList<LinkReport> i_reports) {
+		try {
+			m_reports = i_reports;			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public static synchronized void counterMinus() {
-		m_Counter--;
+		m_DownloaderCounter--;
 	}
 	
 	public static synchronized int getCounter() {
-		return m_Counter;
+		return m_DownloaderCounter;
 	}
 	
-	public synchronized boolean isFinished() {
-		boolean res = false;
-		int report = 0;
-		if (m_Counter == report
+	public synchronized void reportCounterPlus() {
+		m_ReportsCounter++;
+	}
+	
+	
+	public synchronized void addReportAndCheckIfFinished(LinkReport i_report) {
+			
+		// add report after analysis to the list
+		if (i_report != null) {
+			LinkReport report = i_report;
+			m_reports.addLast(report);			
+		}
+		
+		// check if all tasks are finished
+		if (m_DownloaderCounter == m_ReportsCounter
 				&& m_UrlsToDownloadQueue.isEmpty() 
 				&& m_HtmlToAnalyzeQueue.isEmpty()) {
-			res = true;
-			
+			m_reports.notify();
 		}
-		return res;
+		
 	}
 	
 }
