@@ -19,6 +19,8 @@ public class ThreadPoolV1 {
 	int m_NumOfAnalyzers;
 	int m_ReportsCounter;
 	
+	LinkedList<String> m_DownloadedLinks;
+	
 	LinkedList<LinkReport> m_reports;
 	
 	public ThreadPoolV1(SynchronizedQueueLL i_UrlsToDownload, int i_NumOfDownloaders,
@@ -27,6 +29,8 @@ public class ThreadPoolV1 {
 		// Reference to the task queue
 		m_UrlsToDownloadQueue = i_UrlsToDownload;
 		m_HtmlToAnalyzeQueue = i_HtmlsToAnalyze;
+		
+		m_DownloadedLinks = new LinkedList<>();
 		
 		// create and start the workers to be ready to get tasks
 		m_NumOfDownloaders = i_NumOfDownloaders;
@@ -97,7 +101,6 @@ public class ThreadPoolV1 {
 		m_ReportsCounter++;
 	}
 	
-	
 	public synchronized void addReportAndCheckIfFinished(LinkReport i_report) {
 			
 		// add report after analysis to the list
@@ -111,8 +114,22 @@ public class ThreadPoolV1 {
 				&& m_UrlsToDownloadQueue.isEmpty() 
 				&& m_HtmlToAnalyzeQueue.isEmpty()) {
 			m_reports.notify();
-		}
-		
+		}	
 	}
 	
+	public synchronized void addToDownloadedList(String i_urlToDowbload) {
+		if (i_urlToDowbload != null) {
+			m_DownloadedLinks.addLast(i_urlToDowbload);			
+		}
+	}
+	
+	public synchronized boolean containsUrlInList(String i_Url) {
+		boolean res = false;
+		
+		if (!m_DownloadedLinks.contains(i_Url)) {
+			res = true;
+		}
+	
+		return res;	
+	}
 }
