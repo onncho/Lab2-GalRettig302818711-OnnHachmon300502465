@@ -14,6 +14,7 @@ public class Link {
 		lengthInBytes = Integer.parseInt(i_lengthInBytes);
 	}
 	
+	
 	public String getExtension() {
 		return extension;
 	}
