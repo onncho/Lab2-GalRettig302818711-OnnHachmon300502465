@@ -141,7 +141,7 @@ public class LinkReport {
 	}
 
 
-	public int getM_pagesTotalSize() {
+	public int getM_ExternalpagesTotalSize() {
 		return m_externalPagesTotalSize;
 	}
 

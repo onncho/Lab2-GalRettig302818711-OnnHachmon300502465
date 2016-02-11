@@ -21,6 +21,8 @@ public class CrawlerReport {
 	int m_numberOfDocuments;
 	int m_numberOfInternalLinks;
 	int m_numberOfExternalLink;
+	
+	//TODO: Why? internal + external ?
 	int m_totalNumberOfLinks;
 
 	//Sizes
@@ -73,6 +75,9 @@ public class CrawlerReport {
 	}
 
 	public CrawlerReport(boolean i_robotsTxtRespected, String i_startPageAddress, LinkedList<String> i_openedPorts){
+		
+		//TODO: Arrange Constructor
+		
 		v_robotsTxtRespected = i_robotsTxtRespected;
 		m_openedPorts = i_openedPorts; //aka not requested
 		m_startPageAddress = i_startPageAddress;
@@ -96,19 +101,18 @@ public class CrawlerReport {
 
 		m_amountOfConnectedDomains = 0;
 	}
-
+	
+	// TODO: check if needed becuase the threadPool does that
 	public void addLinkReport(LinkReport linkReport){
 		String address = linkReport.m_pageAddress;
 		if(!m_ReportsDB.containsKey(address)){
 			m_ReportsDB.put(address, linkReport);
-
 		}
 	}
-
+	
 	public void reportsToProcess(LinkedList<LinkReport> i_reportsNotProcess) {
-
 		if (i_reportsNotProcess != null) {
-			// empty report that need to be filled
+			// filled with reports after the analyzer used the threadpool to insert reports
 			m_ReportsNotProcess = i_reportsNotProcess;
 			processReports();			
 		}
@@ -127,14 +131,27 @@ public class CrawlerReport {
 			}
 
 			// sums objects for statistics
+			
+			//Amounts
+			m_numberOfImages += report.amountOfImages();
+			m_numberOfVideos += report.amountOfVideos();
+			m_numberOfDocuments += report.amountOfDocuments();
+			m_numberOfExternalLink += report.amountOfExternalPages();
+			
+			//Sizes
 			m_sizeOfAllImages += report.getM_imagesTotalSize();
 			m_sizeOfAllVideos += report.getM_videosTotalSize();
 			m_sizeOfAllDocuments += report.getM_documentsTotalSize();
-
-			// TODO: pages total size? 
-			m_totalSizeOfAllLinks += report.getM_pagesTotalSize();
+			
+			// internal + external 
+			// 
+			// TODO: sum everything (size in bytes of pages)
+			m_totalSizeOfAllLinks += report.getSizeOfThisPageInBytes();
 
 		}
+		
+		// size of reports means numbers of internal pages downloads and analyze from the domain
+		m_numberOfInternalLinks = m_ReportsNotProcess.size();
 
 	}
 
