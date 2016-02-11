@@ -83,6 +83,7 @@ public class HTTPQuery {
 
 			String requestLine = requestType + " " + path + " " + "HTTP/1.1";
 			String headers = "Host: " + host;
+			System.out.println("REQUEST-->\n" + requestLine + "\n" + headers );
 
 			char currentRecievedChar;
 

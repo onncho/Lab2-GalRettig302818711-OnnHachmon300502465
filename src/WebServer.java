@@ -29,7 +29,7 @@ public class WebServer {
 		webSrv.start();
 		*/
 		
-		String url = "http://www.faculty.idc.ac.il/smozes/complexity/index.html";//"http://www.play-hookey.com";
+		String url = "http://www.faculty.idc.ac.il/smozes/index.html";//"http://www.play-hookey.com";
 		
 		Crawler myCrawler = new Crawler(url, false, false);
 		myCrawler.startCrawling();

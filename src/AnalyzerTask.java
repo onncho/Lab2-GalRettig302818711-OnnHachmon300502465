@@ -182,7 +182,7 @@ public class AnalyzerTask implements Runnable {
 		boolean inserted = false;
 		try {
 			linkURI = new URI(formattedLink);
-			if(linkURI.getHost() == m_uri.getHost()){
+			if(linkURI.getHost().equals(m_uri.getHost())){
 				m_internalAnchors.push(formattedLink);
 				inserted = pushIfNotExists(m_internalAnchors, formattedLink);
 			} else {
@@ -212,7 +212,7 @@ public class AnalyzerTask implements Runnable {
 
 	private String getExtensionFromString(String linkToMap) {
 		String ext = null;
-		int indexOfDotChar = linkToMap.indexOf(".");
+		int indexOfDotChar = linkToMap.lastIndexOf(".");
 		if(indexOfDotChar > -1){
 			ext = linkToMap.substring(indexOfDotChar + 1);
 		}
