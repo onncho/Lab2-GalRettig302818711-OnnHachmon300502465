@@ -297,11 +297,19 @@ public class AnalyzerTask implements Runnable {
 	private Link createLink(String linkAddress, String extension){
 		Link link = null;
 		try {
-			String typeAndLength[] = query.sendHttpHeadRequestAndGetTypeAndLengthFromResponse(linkAddress).split("#_#@#_#");
-			String type = typeAndLength[0];
-			String length = typeAndLength[1];
-			link = new Link(linkAddress, extension, type, length);
+			if(m_threadPool.containsUrlInAnalyzedNonInternalLinksList(linkAddress)){
+				String typeAndLength[] = query.sendHttpHeadRequestAndGetTypeAndLengthFromResponse(linkAddress).split("#_#@#_#");
+				
+				m_threadPool.addToAnalyzedNonInternalLinks(linkAddress);
+				
+				String type = typeAndLength[0];
+				String length = typeAndLength[1];
+				link = new Link(linkAddress, extension, type, length);
+			} else {
+				System.out.println("skipped a link since it already appeared in urls list : " + linkAddress);
+			}
 		} catch (IOException e) {
+			System.out.println("EXCEPTION ON AnalyzerTask->CreateLink() with linkAddress = " + linkAddress);
 			e.printStackTrace();
 		}
 		

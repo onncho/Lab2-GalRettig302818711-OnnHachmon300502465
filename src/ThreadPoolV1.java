@@ -20,6 +20,7 @@ public class ThreadPoolV1 {
 	int m_ReportsCounter;
 	
 	LinkedList<String> m_DownloadedLinks;
+	LinkedList<String> m_AnalyzedNonInternalLinks;//external/internal imgs/videos/docs and external pages
 	
 	LinkedList<LinkReport> m_reports;
 	
@@ -31,6 +32,7 @@ public class ThreadPoolV1 {
 		m_HtmlToAnalyzeQueue = i_HtmlsToAnalyze;
 		
 		m_DownloadedLinks = new LinkedList<>();
+		m_AnalyzedNonInternalLinks = new LinkedList<>();
 		
 		// create and start the workers to be ready to get tasks
 		m_NumOfDownloaders = i_NumOfDownloaders;
@@ -132,4 +134,21 @@ public class ThreadPoolV1 {
 	
 		return res;	
 	}
+	
+	public synchronized void addToAnalyzedNonInternalLinks(String i_nonInternalLink) {
+		if (i_nonInternalLink != null) {
+			m_AnalyzedNonInternalLinks.addLast(i_nonInternalLink);			
+		}
+	}
+	
+	public synchronized boolean containsUrlInAnalyzedNonInternalLinksList(String i_Url) {
+		boolean res = false;
+		
+		if (!m_AnalyzedNonInternalLinks.contains(i_Url)) {
+			res = true;
+		}
+	
+		return res;	
+	}
+	
 }
