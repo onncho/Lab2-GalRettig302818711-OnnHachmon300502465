@@ -11,9 +11,7 @@ public class ThreadPoolV1 {
 	int m_NumOfDownloaders;
 
 	private static int m_DownloaderCounter;
-	//TODO: to delelte
-	private boolean m_isFinished;
-
+	
 	// create task queue for analyzers
 	SynchronizedQueueLL m_HtmlToAnalyzeQueue;
 	int m_NumOfAnalyzers;
