@@ -139,7 +139,7 @@ public class HTTPQuery {
 			}
 		}
 		
-		return lengthValue + _seperator + typeValue;
+		return typeValue + _seperator + lengthValue;
 	}
 
 	// <img src="www.ynet.co.il/image/logo_2.png ...>
