@@ -31,6 +31,9 @@ public class LinkReport {
 		
 	}
 	
+	public int getSizeOfPage(){
+		return m_sizeOfPageInBytes;
+	}
 	
 	private boolean listContains(LinkedList<Link> list, Link link){
 		boolean notExists = true;
