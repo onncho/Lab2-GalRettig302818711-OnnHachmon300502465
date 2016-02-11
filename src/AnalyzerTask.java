@@ -28,7 +28,7 @@ public class AnalyzerTask implements Runnable {
 	
 	LinkReport m_report;
 	
-	public AnalyzerTask(String i_htmlSourceCode, ThreadPoolV1 i_threadPool, String i_pageAddress) throws URISyntaxException{
+	public AnalyzerTask(String i_htmlSourceCode, ThreadPoolV1 i_threadPool, String i_pageAddress, String i_lengthAndType) throws URISyntaxException{
 		m_threadPool = i_threadPool;
 		m_htmlSourceCode = i_htmlSourceCode;
 		m_pageAddress = i_pageAddress;
@@ -230,6 +230,12 @@ public class AnalyzerTask implements Runnable {
 		return str.substring(1, str.length());
 	}
 
+	private void fetchResourcesFouned(){
+		fetchAllFromList(m_images, 0);
+		fetchAllFromList(m_videos, 1);
+		fetchAllFromList(m_docs, 2);
+	}
+	
 	/**
 	 * @TODO pages in links, are going to be downloaded anyway and will have own reports
 	 * @param list to pop link from
@@ -252,9 +258,9 @@ public class AnalyzerTask implements Runnable {
 					else if(i == 2){
 						m_report.addDocumentLink(link);
 					}
-					/*else if(i == 3){
+					else if(i == 3){
 						m_report.addPageLink(link);
-					}*/
+					}
 					
 					
 				} else {
