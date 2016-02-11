@@ -12,7 +12,7 @@ public class HTTPQuery {
 	
 	final String _CRLF = "\r\n";
 	
-	private String[] sendHttpRequest(String target, String requestType) throws IOException, UnknownHostException{
+	/*private String[] sendHttpRequest(String target, String requestType) throws IOException, UnknownHostException{
 		String res[] = new String[2];
 		String response = "";
 		boolean fetchContent = requestType.equals("GET");
@@ -69,8 +69,59 @@ public class HTTPQuery {
 			throw new IOException();
 		}
 		return res;
+	}*/
+	
+	
+	public String[] sendHttpRequest(String target, String requestType) {
+		String response[] = null;
+		try {
+			URL uri = new URL(target);
+
+			String host = uri.getHost();
+			String path = uri.getPath();
+			path = path == "" ? "/" : path;
+
+			String requestLine = requestType + " " + path + " " + "HTTP/1.1";
+			String headers = "Host: " + host;
+
+			char currentRecievedChar;
+
+			Socket socket = new Socket(InetAddress.getByName(host), 80);
+			PrintWriter writer = new PrintWriter(socket.getOutputStream());
+			BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+
+			writer.write(requestLine);
+			writer.write(_CRLF.toCharArray());
+			writer.flush();
+
+			writer.write(headers);
+			writer.write(_CRLF.toCharArray());
+			writer.flush();
+
+			writer.write(_CRLF.toCharArray());
+			writer.flush();
+
+			/*while ((currentRecievedChar = (char) reader.read()) != -1) {
+				response += currentRecievedChar;
+			}*/
+			response = readHttpResponse(socket);
+			//System.out.println(response);
+
+			
+			writer.close();
+			socket.close();
+
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return response;
 	}
-	//TODO: check if we can make it to one method instead of 2
+	
+	
+	
+	/*//TODO: check if we can make it to one method instead of 2
 	public String[] readHttpResponse(InputStream connection) throws IOException{
 		String ContentLengthHeader = "Content-Length: ";
 		int contentLength = -1;
@@ -116,6 +167,59 @@ public class HTTPQuery {
 			throw new IOException();
 		}
 		
+		return new String[]{m_FullRequest, m_messageBodyString};
+	}*/
+	
+	public static String[] readHttpResponse(Socket connection) {
+		String ContentLengthHeader = "Content-Length: ";
+		int contentLength = -1;
+		String m_FullRequest = "";
+		char[] m_MsgBodyCharBuffer;
+		StringBuilder m_MessageBodyBuilder = new StringBuilder("");
+		String m_messageBodyString = "";
+		
+		try {
+			if (connection.isClosed()) {
+				return null;
+			}
+			BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+			String line = reader.readLine();
+
+			// Read Request According to Http Protocol
+			while (line != null && !line.equals("")) {
+				// Check For Request With A Body Message
+				if (line.indexOf(ContentLengthHeader) > -1) {
+					String bodyContentLengthAsString = line.substring(ContentLengthHeader.length());
+					contentLength = Integer.parseInt(bodyContentLengthAsString);
+				}
+				m_FullRequest += (line + "\n");
+				line = reader.readLine();
+			}
+
+			// Handle With Request that Contain Body Message
+			if (contentLength > 0) {
+				m_MsgBodyCharBuffer = new char[contentLength];
+				reader.read(m_MsgBodyCharBuffer);
+				m_MessageBodyBuilder = new StringBuilder();
+
+				for (int i = 0; i < m_MsgBodyCharBuffer.length; i++) {
+					m_MessageBodyBuilder.append(m_MsgBodyCharBuffer[i]);
+				}
+				m_messageBodyString = m_MessageBodyBuilder.toString();
+			}
+
+			// TRACE: Request Headers
+			//System.out.println(m_FullRequest);
+			
+			reader.close();
+
+		} catch (IOException e) {
+			System.err.println("ERROR: IO Exception");
+		}
+		System.out.println(m_FullRequest);
+		//System.out.println("---");
+		System.out.println(m_messageBodyString);
+		//System.out.println("qq---qq--");
 		return new String[]{m_FullRequest, m_messageBodyString};
 	}
 	
