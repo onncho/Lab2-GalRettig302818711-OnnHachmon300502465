@@ -3,7 +3,9 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.LinkedList;
 
-
+/////////
+//TODO: GAL -> at the moment verifing only if link already exists in this current analysis process and not in the ENTIRE crawling process
+////////
 public class AnalyzerTask implements Runnable {
 
 	LinkedList<String> m_externalAnchors;
@@ -19,7 +21,6 @@ public class AnalyzerTask implements Runnable {
 	HTTPQuery query = new HTTPQuery();
 	
 	ThreadPoolV1 m_threadPool;
-	
 	
 	String m_htmlSourceCode;
 	URI m_uri;
@@ -162,24 +163,44 @@ public class AnalyzerTask implements Runnable {
 		return verifiedLink;
 	}
 	
-	private void populateAnchors(String link){
+	
+	/**
+	 * @param link -> anchor to be added to the external or internal lists if doesn't already exists
+	 * @return true on success
+	 */
+	private boolean populateAnchors(String link){
 		
 		String formattedLink = reformatAnchorLink(link);
 		URI linkURI;
+		boolean inserted = false;
 		try {
 			linkURI = new URI(formattedLink);
 			if(linkURI.getHost() == m_uri.getHost()){
 				m_internalAnchors.push(formattedLink);
+				inserted = pushIfNotExists(m_internalAnchors, formattedLink);
 			} else {
-				m_ext
+				inserted = pushIfNotExists(m_externalAnchors, formattedLink);
 			}
 			
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 		}
 		
-		
-		
+		return inserted;
+	}
+	
+	/**
+	 * 
+	 * @param LinkedList<String> set -> list to push element to
+	 * @param member -> string to push if not already in list
+	 * @return true if member was added , false otherwise
+	 */
+	private boolean pushIfNotExists(LinkedList<String> set, String member){
+		boolean exists = listContainsElement(set, member);
+		if(!exists){
+			set.push(member);
+		}
+		return !exists;
 	}
 	
 	private String getExtensionFromString(String linkToMap) {
