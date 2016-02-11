@@ -34,6 +34,7 @@ public class AnalyzerTask implements Runnable {
 		if(m_pageAddress.toLowerCase().indexOf("http://") != 0 && m_pageAddress.toLowerCase().indexOf("https://") != 0){
 			m_pageAddress = "http://" + m_pageAddress;
 		}
+		
 		URI m_uri = new URI(i_pageAddress);
 		
 		m_allowedImageExt = (LinkedList<String>) ConfigurationObject.getImageExtensions();
@@ -227,7 +228,7 @@ public class AnalyzerTask implements Runnable {
 		return str.substring(1, str.length());
 	}
 	
-	private String fetchImageLength(){
+	private String fetchLinkData(){
 		String link = m_images.pop();
 		try {
 			String response = query.sendHttpHeadRequest(link);
