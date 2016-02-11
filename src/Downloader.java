@@ -26,7 +26,6 @@ public class Downloader implements Runnable {
 				//TODO: Debug 
 				System.out.println("site has been downloaded ****");
 
-				// TODO: check if the download succeed
 				if (m_DownloadedHtmlWithBody != null) {
 					String body = m_DownloadedHtmlWithBody[1];
 

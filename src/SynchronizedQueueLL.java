@@ -6,9 +6,7 @@ public class SynchronizedQueueLL {
 	private int m_size;
 	
 	public SynchronizedQueueLL() {
-		// TODO Auto-generated constructor stub
 		m_buffer = new LinkedList<Runnable>();
-		// TODO: Maybe to delete, depends if producers is needed...??
 	}
 	
 	// dequeue operation

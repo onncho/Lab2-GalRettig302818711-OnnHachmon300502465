@@ -76,7 +76,8 @@ public class CrawlerReport {
 
 	public CrawlerReport(boolean i_robotsTxtRespected, String i_startPageAddress, LinkedList<String> i_openedPorts){
 		
-		//TODO: Arrange Constructor
+		//TODO: Arrange Constructo
+		// maybe to delete
 		
 		v_robotsTxtRespected = i_robotsTxtRespected;
 		m_openedPorts = i_openedPorts; //aka not requested
@@ -121,7 +122,7 @@ public class CrawlerReport {
 	private void processReports() {
 
 		for(LinkReport report : m_ReportsNotProcess) {
-			//TODO: check that it's good
+			
 			String domainKey = report.getM_pageAddress();
 
 			//insert to DB

@@ -55,8 +55,7 @@ public class ThreadPoolV1 {
 		m_ReportsCounter = 0;
 	}
 
-	//TODO: test for handling webSRV regular Requests
-	// TODO: maybe change names to generic names.  
+	// TODO: maybe change names to generic names. because we activate the webSRV from here also
 	public ThreadPoolV1(SynchronizedQueueLL tasks, int numofthreads) {
 		m_UrlsToDownloadQueue = tasks;
 
@@ -76,7 +75,6 @@ public class ThreadPoolV1 {
 		}
 	}
 
-	// TODO: Check if needed...
 	public void putTaskInAnalyzersQueue(Runnable task) {
 		synchronized (m_HtmlToAnalyzeQueue) {
 			m_HtmlToAnalyzeQueue.enqueue(task);

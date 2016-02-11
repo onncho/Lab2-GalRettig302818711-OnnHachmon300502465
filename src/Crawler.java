@@ -20,7 +20,6 @@ public class Crawler {
 
 	// TODO: Need to receive parameters 
 	public Crawler(String i_DomainToCrawl, boolean i_RobotsChecked, boolean i_PortScanChecked) {
-		// TODO Auto-generated constructor stub
 		m_DomainToCrawl = i_DomainToCrawl;
 		m_NumOfDownloaders = Integer.parseInt(ConfigurationObject.getMaxDownloaders());
 		m_NumOfAnalyzers = Integer.parseInt(ConfigurationObject.getMaxAnalyzers());
@@ -62,22 +61,10 @@ public class Crawler {
 				Thread.sleep(2000);
 				m_CrawlingRunning = !m_threadPool.isFinished();
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
-		
-		
-		/*
-		// wait for the analyzers to finish creating reports
-		try {
-			m_Reports.wait();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		*/
-		
+				
 		// analysis ends 
 		createFinalReport();
 		System.out.println("Exit Crawler Class");

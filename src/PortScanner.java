@@ -37,7 +37,6 @@ public class PortScanner {
 				address = InetAddress.getByName(m_target);
 				m_TargetParsed = address.getHostAddress();
 			} catch (UnknownHostException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 		}

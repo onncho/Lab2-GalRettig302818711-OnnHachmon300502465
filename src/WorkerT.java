@@ -17,9 +17,7 @@ public class WorkerT extends Thread {
 				if (m_tasks.getCapacity() == 0) {
 					try {
 						m_tasks.wait();
-						
 					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
