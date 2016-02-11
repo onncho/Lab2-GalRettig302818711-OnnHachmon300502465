@@ -31,7 +31,9 @@ public class WebServer {
 		
 		String url = "http://www.faculty.idc.ac.il/smozes/index.html";//"http://www.play-hookey.com";
 		
-		Crawler myCrawler = new Crawler(url, false, false);
+		String url2 = "http://www.naon-serv.co.il";
+		
+		Crawler myCrawler = new Crawler(url2, false, false);
 		myCrawler.startCrawling();
 	}
 

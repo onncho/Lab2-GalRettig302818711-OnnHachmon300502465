@@ -219,7 +219,7 @@ public class HTTPQuery {
 		}
 		System.out.println(m_FullRequest);
 		//System.out.println("---");
-		System.out.println(m_messageBodyString);
+		//System.out.println(m_messageBodyString);
 		//System.out.println("qq---qq--");
 		return new String[]{m_FullRequest, m_messageBodyString};
 	}

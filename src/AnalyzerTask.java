@@ -55,23 +55,21 @@ public class AnalyzerTask implements Runnable {
 		m_report = createReport();
 	}
 
-	//TODO: temp run method until threads will be implemented
-
 	@Override
 	public void run() {
 		lookForAnchorsAndPopulate();
 		lookForImagesAndPopulate();
 
 		fetchResourcesFounedAndAddToReport();
-
+		
+		// send all internal link to downloader queue
 		LinkedList<String> internalLinksToDownload = getInternalAnchors();
 		for(int i = 0; i < internalLinksToDownload.size(); i++){
 			Downloader downloader = new Downloader(m_threadPool, internalLinksToDownload.get(i));
 			m_threadPool.putTaskInDownloaderQueue((Runnable) downloader);
 		}
+		
 		m_threadPool.addReportAndCheckIfFinished(m_report);
-
-
 	}
 
 	private LinkedList<String> getInternalAnchors() {
@@ -296,8 +294,6 @@ public class AnalyzerTask implements Runnable {
 
 		}
 	}
-
-
 
 	private Link createLink(String linkAddress, String extension){
 		Link link = null;

@@ -104,7 +104,8 @@ public class ThreadPoolV1 {
 		// add report after analysis to the list
 		if (i_report != null) {
 			LinkReport report = i_report;
-			m_reports.addLast(report);			
+			m_reports.addLast(report);	
+			reportCounterPlus();
 		}
 		
 		if (isFinished()) {
@@ -129,7 +130,8 @@ public class ThreadPoolV1 {
 
 	public synchronized void addToDownloadedList(String i_urlToDowbload) {
 		if (i_urlToDowbload != null) {
-			m_DownloadedLinks.addLast(i_urlToDowbload);			
+			m_DownloadedLinks.addLast(i_urlToDowbload);		
+			System.out.println("**************" + i_urlToDowbload + "****************");
 		}
 	}
 
