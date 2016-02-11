@@ -1,18 +1,13 @@
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.InetAddress;
-import java.net.Socket;
-import java.net.URL;
-import java.net.UnknownHostException;
-import java.util.HashMap;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.LinkedList;
 
 
 public class AnalyzerTask implements Runnable {
 
-	LinkedList<String> m_anchors;
+	LinkedList<String> m_externalAnchors;
+	LinkedList<String> m_internalAnchors;
 	LinkedList<String> m_images;
 	LinkedList<String> m_videos;
 	LinkedList<String> m_docs;
@@ -27,16 +22,25 @@ public class AnalyzerTask implements Runnable {
 	
 	
 	String m_htmlSourceCode;
-
-	public AnalyzerTask(String i_htmlSourceCode, ThreadPoolV1 i_threadPool){
-		m_htmlSourceCode = i_htmlSourceCode;
+	URI m_uri;
+	String m_pageAddress;
+	
+	public AnalyzerTask(String i_htmlSourceCode, ThreadPoolV1 i_threadPool, String i_pageAddress) throws URISyntaxException{
 		m_threadPool = i_threadPool;
+		m_htmlSourceCode = i_htmlSourceCode;
+		m_pageAddress = i_pageAddress;
+		
+		if(m_pageAddress.toLowerCase().indexOf("http://") != 0 && m_pageAddress.toLowerCase().indexOf("https://") != 0){
+			m_pageAddress = "http://" + m_pageAddress;
+		}
+		URI m_uri = new URI(i_pageAddress);
 		
 		m_allowedImageExt = (LinkedList<String>) ConfigurationObject.getImageExtensions();
 		m_allowedVideoExt = (LinkedList<String>) ConfigurationObject.getVideoExtensions();
 		m_allowedDocExt = (LinkedList<String>) ConfigurationObject.getDocumentExtensions();
 		
-		m_anchors = new LinkedList<>();
+		m_externalAnchors = new LinkedList<>();
+		m_internalAnchors = new LinkedList<>();
 		m_images = new LinkedList<>();
 		m_videos = new LinkedList<>();
 		m_docs = new LinkedList<>();
@@ -171,12 +175,45 @@ public class AnalyzerTask implements Runnable {
 				}
 			}
 			else {
-				m_anchors.push(linkToMap);
+				//m_anchors.push(linkToMap);
+				populateAnchors(linkToMap);
 				break;
 			}
 			i++;
 		}
 		return i;
+	}
+	
+	// TODO: rejecting any line formatted without "http"/s "/" 
+	private String reformatAnchorLink(String link){
+		String linkLowered = link.toLowerCase();
+		String verifiedLink;
+		if(linkLowered.indexOf("/") == 0) {
+			verifiedLink = "http://" + m_uri.getPath() + link.toLowerCase();
+		} else {
+			verifiedLink = (linkLowered.indexOf("http://") == 0 || linkLowered.indexOf("https://") == 0) ?  linkLowered : "http://" + linkLowered;
+		}
+		return verifiedLink;
+	}
+	
+	private void populateAnchors(String link){
+		
+		String formattedLink = reformatAnchorLink(link);
+		URI linkURI;
+		try {
+			linkURI = new URI(formattedLink);
+			if(linkURI.getHost() == m_uri.getHost()){
+				m_internalAnchors.push(formattedLink);
+			} else {
+				m_ext
+			}
+			
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		}
+		
+		
+		
 	}
 	
 	private String getExtensionFromString(String linkToMap) {
