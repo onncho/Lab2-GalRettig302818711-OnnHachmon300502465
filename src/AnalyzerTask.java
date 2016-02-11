@@ -26,6 +26,8 @@ public class AnalyzerTask implements Runnable {
 	URI m_uri;
 	String m_pageAddress;
 	
+	LinkReport m_report;
+	
 	public AnalyzerTask(String i_htmlSourceCode, ThreadPoolV1 i_threadPool, String i_pageAddress) throws URISyntaxException{
 		m_threadPool = i_threadPool;
 		m_htmlSourceCode = i_htmlSourceCode;
@@ -228,10 +230,10 @@ public class AnalyzerTask implements Runnable {
 		return str.substring(1, str.length());
 	}
 	
-	private String fetchLinkData(){
+	private g fetchLinkData(){
 		String link = m_images.pop();
 		try {
-			String response = query.sendHttpHeadRequest(link);
+			String typeAndLength = query.sendHttpHeadRequestAndGetTypeAndLengthFromResponse(link);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -239,6 +241,11 @@ public class AnalyzerTask implements Runnable {
 		return null;
 	}
 
+	
+	private LinkReport createReport(){
+		LinkReport report = new LinkReport(m_pageAddress);
+		return report;
+	}
 
 
 }
