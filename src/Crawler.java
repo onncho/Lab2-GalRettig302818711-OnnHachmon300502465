@@ -19,6 +19,7 @@ public class Crawler {
 	// TODO: Need to receive parameters 
 	public Crawler(String i_DomainToCrawl, boolean i_RobotsChecked, boolean i_PortScanChecked) {
 		// TODO Auto-generated constructor stub
+		m_DomainToCrawl = i_DomainToCrawl;
 		m_NumOfDownloaders = Integer.parseInt(ConfigurationObject.getMaxDownloaders());
 		m_NumOfAnalyzers = Integer.parseInt(ConfigurationObject.getMaxAnalyzers());
 		m_UrlsQueueToDownload = new SynchronizedQueueLL();
@@ -27,15 +28,16 @@ public class Crawler {
 				m_HtmlsQueueToAnalyze, m_NumOfAnalyzers);
 		
 		// transfer the reference of the reports to the threadpool
+		m_Reports = new LinkedList<>();
 		m_threadPool.setRefernceToReports(m_Reports);
 		m_RobotsChecked = i_RobotsChecked;
 		m_PortScannerChecked = i_PortScanChecked;
 		
 		// start
-		startCrawling();
+		//startCrawling();
 	}
 
-	private void startCrawling() {
+	public void startCrawling() {
 		// TODO Auto-generated method stub
 		
 		// if port scan V -> DO First
@@ -52,6 +54,7 @@ public class Crawler {
 		m_Downloader = new Downloader(m_threadPool, m_DomainToCrawl);
 		m_threadPool.putTaskInDownloaderQueue((Runnable) m_Downloader);
 		
+		/*
 		// wait for the analyzers to finish creating reports
 		try {
 			m_Reports.wait();
@@ -59,9 +62,10 @@ public class Crawler {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+		*/
 		// analysis ends 
-		createFinalReport();
+		//createFinalReport();
+		System.out.println("Exit Crawler Class");
 	}
 
 	private void createFinalReport() {

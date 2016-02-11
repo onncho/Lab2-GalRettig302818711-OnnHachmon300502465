@@ -22,10 +22,15 @@ public class Downloader implements Runnable {
 
 			if (!m_threadPool.containsUrlInList(m_UrlToDownload)) {
 				m_DownloadedHtmlWithBody = m_QuerySite.sendHttpGetRequest(m_UrlToDownload);
+				
+				//TODO: Debug 
+				System.out.println("site has been downloaded ****");
 
 				// TODO: check if the download succeed
 				if (m_DownloadedHtmlWithBody != null) {
 					String body = m_DownloadedHtmlWithBody[1];
+					
+					System.out.println(body);
 
 					m_PageSizeAndType = m_QuerySite.parseContentLengthFromHttpResponse(m_DownloadedHtmlWithBody[0]);
 

@@ -16,6 +16,7 @@ public class WebServer {
 			throw new IOException("Problem in Reading The Config File");
 		}
 		
+		/*
 		// TODO: test for lab2
 		//ThreadPool threadPool = new ThreadPool(ConfigurationObject.getMaxThreads());
 		SynchronizedQueueLL taskQ = new SynchronizedQueueLL();
@@ -26,6 +27,12 @@ public class WebServer {
 
 		//webserver.start();
 		webSrv.start();
+		*/
+		
+		String url = "http://www.play-hookey.com";
+		
+		Crawler myCrawler = new Crawler(url, false, false);
+		myCrawler.startCrawling();
 	}
 
 }

@@ -1,5 +1,6 @@
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.InetAddress;
@@ -55,7 +56,7 @@ public class HTTPQuery {
 				reader.close();
 				
 			} else {
-				res = readHttpResponse(socket);
+				res = readHttpResponse(socket.getInputStream());
 			}
 			writer.close();
 			socket.close();
@@ -70,7 +71,7 @@ public class HTTPQuery {
 		return res;
 	}
 	//TODO: check if we can make it to one method instead of 2
-	public String[] readHttpResponse(Socket connection) throws IOException{
+	public String[] readHttpResponse(InputStream connection) throws IOException{
 		String ContentLengthHeader = "Content-Length: ";
 		int contentLength = -1;
 		String m_FullRequest = "";
@@ -79,10 +80,10 @@ public class HTTPQuery {
 		String m_messageBodyString = "";
 		
 		try {
-			if (connection.isClosed()) {
-				return null;
-			}
-			BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+			//if (connection.isClosed()) {
+			//	return null;
+			//}
+			BufferedReader reader = new BufferedReader(new InputStreamReader(connection));
 			String line = reader.readLine();
 
 			// Read Request According to Http Protocol

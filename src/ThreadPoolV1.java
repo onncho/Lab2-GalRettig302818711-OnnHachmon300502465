@@ -128,7 +128,7 @@ public class ThreadPoolV1 {
 	public synchronized boolean containsUrlInList(String i_Url) {
 		boolean res = false;
 		
-		if (!m_DownloadedLinks.contains(i_Url)) {
+		if (m_DownloadedLinks.contains(i_Url)) {
 			res = true;
 		}
 	

@@ -60,7 +60,7 @@ public class Utils {
 			
 			//Lab2
 			confList.put("maxDownloader", prop.getProperty("maxDownloader"));
-			confList.put("maxAnalzer", prop.getProperty("maxAnalyzer"));
+			confList.put("maxAnalyzer", prop.getProperty("maxAnalyzer"));
 			confList.put("imageExtensionsNotParsed", prop.getProperty("imageExtensions"));
 			confList.put("videoExtensionsNotParsed", prop.getProperty("videoExtensions"));
 			confList.put("documentExtensionsNotParsed", prop.getProperty("documentExtensions"));

@@ -32,8 +32,7 @@ public class SynchronizedQueueLL {
 		}
 		
 		// dequeue
-		Runnable task = m_buffer.getLast();
-		m_buffer.removeLast();
+		Runnable task = m_buffer.removeLast();
 		notifyAll();
 		
 		return task;
