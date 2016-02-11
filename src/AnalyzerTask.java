@@ -165,7 +165,12 @@ public class AnalyzerTask implements Runnable {
 		if(linkLowered.indexOf("/") == 0) {
 			verifiedLink = "http://" + m_uri.getPath() + link.toLowerCase();
 		} else {
-			verifiedLink = (linkLowered.indexOf("http://") == 0 || linkLowered.indexOf("https://") == 0) ?  linkLowered : "http://" + linkLowered;
+			//verifiedLink = (linkLowered.indexOf("http://") == 0 || linkLowered.indexOf("https://") == 0) ?  linkLowered : "http://" + linkLowered;
+			if(linkLowered.indexOf("http://") != 0 && linkLowered.indexOf("https://") != 0){
+				verifiedLink = (linkLowered.indexOf(m_uri.getHost()) == -1) ? "http://" + m_uri.getHost() + "/" +linkLowered : "http://" + linkLowered; 
+			} else {
+				verifiedLink = linkLowered;
+			}
 		}
 		return verifiedLink;
 	}
@@ -222,7 +227,7 @@ public class AnalyzerTask implements Runnable {
 	private boolean listContainsElement(LinkedList<String> set, String member){
 		int i = 0;
 		while(i < set.size()){
-			if(set.get(i).equals(member)){
+			if(set.get(i).trim().equals(member)){
 				return true;
 			}
 			i++;
