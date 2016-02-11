@@ -144,7 +144,7 @@ public class ThreadPoolV1 {
 	public synchronized boolean containsUrlInAnalyzedNonInternalLinksList(String i_Url) {
 		boolean res = false;
 		
-		if (!m_AnalyzedNonInternalLinks.contains(i_Url)) {
+		if (m_AnalyzedNonInternalLinks.contains(i_Url)) {
 			res = true;
 		}
 	
