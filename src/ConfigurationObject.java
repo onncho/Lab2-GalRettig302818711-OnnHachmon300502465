@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 // SingleTone Class
@@ -46,7 +47,7 @@ public class ConfigurationObject {
 	
 	private List<String> parseStringToList(String i_stringToParse) {
 		String[] values = i_stringToParse.split(",");	
-		List<String> res = new ArrayList<String>();
+		List<String> res = new LinkedList<String>();
 		
 		for(String val : values)
 		{
