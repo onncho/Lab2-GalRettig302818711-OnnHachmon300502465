@@ -19,13 +19,15 @@ public class Crawler {
 	// TODO: Need to receive parameters 
 	public Crawler(String i_DomainToCrawl, boolean i_RobotsChecked, boolean i_PortScanChecked) {
 		// TODO Auto-generated constructor stub
-		m_Reports = new LinkedList<>();
 		m_NumOfDownloaders = Integer.parseInt(ConfigurationObject.getMaxDownloaders());
 		m_NumOfAnalyzers = Integer.parseInt(ConfigurationObject.getMaxAnalyzers());
 		m_UrlsQueueToDownload = new SynchronizedQueueLL();
 		m_HtmlsQueueToAnalyze = new SynchronizedQueueLL();
 		m_threadPool = new ThreadPoolV1(m_UrlsQueueToDownload, m_NumOfDownloaders, 
 				m_HtmlsQueueToAnalyze, m_NumOfAnalyzers);
+		
+		// transfer the reference of the reports to the threadpool
+		m_threadPool.setRefernceToReports(m_Reports);
 		m_RobotsChecked = i_RobotsChecked;
 		m_PortScannerChecked = i_PortScanChecked;
 		

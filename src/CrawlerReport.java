@@ -3,7 +3,7 @@ import java.util.LinkedList;
 
 public class CrawlerReport {
 
-	HashMap<String, LinkReport> m_reports;
+	HashMap<String, LinkReport> m_ReportsDB;
 	String m_startPageAddress;
 	
 	/*int m_numberOfImages;
@@ -38,7 +38,7 @@ public class CrawlerReport {
 		m_openedPorts = null; //aka not requested
 		m_startPageAddress = i_startPageAddress;
 		
-		m_reports = new HashMap<>();
+		m_ReportsDB = new HashMap<>();
 		
 		m_images = new LinkedList<>();
 		m_videos = new LinkedList<>();
@@ -66,7 +66,7 @@ public class CrawlerReport {
 		m_openedPorts = i_openedPorts; //aka not requested
 		m_startPageAddress = i_startPageAddress;
 		
-		m_reports = new HashMap<>();
+		m_ReportsDB = new HashMap<>();
 		
 		m_images = new LinkedList<>();
 		m_videos = new LinkedList<>();
@@ -88,16 +88,43 @@ public class CrawlerReport {
 	
 	public void addLinkReport(LinkReport linkReport){
 		String address = linkReport.m_pageAddress;
-		if(!m_reports.containsKey(address)){
-			m_reports.put(address, linkReport);
+		if(!m_ReportsDB.containsKey(address)){
+			m_ReportsDB.put(address, linkReport);
 			
 		}
 	}
 	
 	public void reportsToProcess(LinkedList<LinkReport> i_reportsNotProcess) {
-	
-		if (i_reportsNotProcess != null) {			
+		
+		if (i_reportsNotProcess != null) {
+			// empty report that need to be filled
 			m_ReportsNotProcess = i_reportsNotProcess;
+			processReports();			
 		}
 	}
+
+	private void processReports() {
+		
+		for(LinkReport report : m_ReportsNotProcess) {
+			//TODO: check that it's good
+			String domainKey = report.getM_pageAddress();
+			
+			//insert to DB
+			if(!m_ReportsDB.containsKey(domainKey)) {
+				m_ReportsDB.put(domainKey, report);
+				
+			}
+			
+			// sums objects for statistics
+			m_sizeOfAllImages += report.getM_imagesTotalSize();
+			m_sizeOfAllVideos += report.getM_videosTotalSize();
+			m_sizeOfAllDocuments += report.getM_documentsTotalSize();
+			
+			// TODO: pages total size? 
+			m_totalSizeOfAllLinks += report.getM_pagesTotalSize();
+			
+		}
+		
+	}
+	
 }

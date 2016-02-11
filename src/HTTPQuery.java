@@ -120,7 +120,7 @@ public class HTTPQuery {
 	
 	
 	
-	private String parseHttpHeadResponse(String response){
+	public String parseContentLengthFromHttpResponse(String response){
 		String[] responseLines = response.split("\n");
 		String _contentLength = "Content-Length: ";
 		String _contentType = "Content-Type: ";
@@ -147,7 +147,7 @@ public class HTTPQuery {
 	//
 	public String sendHttpHeadRequestAndGetTypeAndLengthFromResponse(String target) throws UnknownHostException, IOException{
 		String response = sendHttpRequest(target, "HEAD")[0];
-		String lengthAndType = parseHttpHeadResponse(response);
+		String lengthAndType = parseContentLengthFromHttpResponse(response);
 		return lengthAndType;
 	}
 	

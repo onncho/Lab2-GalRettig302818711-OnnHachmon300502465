@@ -8,6 +8,7 @@ public class Downloader implements Runnable {
 	ThreadPoolV1 m_threadPool;
 	String[] m_DownloadedHtmlWithBody;
 	AnalyzerTask m_AnalyzerTask;
+	String m_PageSizeAndType;
 	
 	public Downloader(ThreadPoolV1 i_threadPool, String i_UrlToDownload) {
 		m_UrlToDownload = i_UrlToDownload;
@@ -25,8 +26,11 @@ public class Downloader implements Runnable {
 			// TODO: check if the download succeed
 			if (m_DownloadedHtmlWithBody != null) {
 				String body = m_DownloadedHtmlWithBody[1];
+				
+				m_PageSizeAndType = m_QuerySite.parseContentLengthFromHttpResponse(m_DownloadedHtmlWithBody[0]);
+				
 				try {
-					m_AnalyzerTask = new AnalyzerTask(body, m_threadPool, m_UrlToDownload);
+					m_AnalyzerTask = new AnalyzerTask(body, m_threadPool, m_UrlToDownload, m_PageSizeAndType);
 				} catch (URISyntaxException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
