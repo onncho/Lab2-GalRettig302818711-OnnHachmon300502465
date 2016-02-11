@@ -276,8 +276,6 @@ public class AnalyzerTask implements Runnable {
 	
 	
 	
-	}
-	
 	private Link createLink(String linkAddress, String extension){
 		Link link = null;
 		try {
