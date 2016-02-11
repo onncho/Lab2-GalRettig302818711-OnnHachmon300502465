@@ -35,11 +35,12 @@ public class AnalyzerTask implements Runnable {
 		m_pageAddress = i_pageAddress;
 		m_sizeAndTypeOfPage = i_lengthAndType;
 		
+		
 		if(m_pageAddress.toLowerCase().indexOf("http://") != 0 && m_pageAddress.toLowerCase().indexOf("https://") != 0){
 			m_pageAddress = "http://" + m_pageAddress;
 		}
 		
-		URI m_uri = new URI(i_pageAddress);
+		m_uri = new URI(i_pageAddress);
 		
 		m_allowedImageExt = (LinkedList<String>) ConfigurationObject.getImageExtensions();
 		m_allowedVideoExt = (LinkedList<String>) ConfigurationObject.getVideoExtensions();
@@ -50,41 +51,42 @@ public class AnalyzerTask implements Runnable {
 		m_images = new LinkedList<>();
 		m_videos = new LinkedList<>();
 		m_docs = new LinkedList<>();
+		
+		m_report = createReport();
 	}
 
 	//TODO: temp run method until threads will be implemented
 	
 	@Override
 	public void run() {
-		//getAllAnchorsFromSource();
-		lookForAnchors();
-		lookForImages();
+		lookForAnchorsAndPopulate();
+		lookForImagesAndPopulate();
 		
-		//////
-		/////
+		fetchResourcesFounedAndAddToReport();
+
 		LinkedList<String> internalLinksToDownload = getInternalAnchors();
 		for(int i = 0; i < internalLinksToDownload.size(); i++){
 			Downloader downloader = new Downloader(m_threadPool, internalLinksToDownload.get(i));
 			m_threadPool.putTaskInDownloaderQueue((Runnable) downloader);
 		}
+		m_threadPool.addReportAndCheckIfFinished(m_report);
 		
 		
 	}
 	
 	private LinkedList<String> getInternalAnchors() {
-		// TODO Auto-generated method stub
-		return null;
+		return m_internalAnchors;
 	}
 
-	private void lookForImages(){
-		getAllPropertiesValueByTag("<img", "src=");
+	private void lookForImagesAndPopulate(){
+		getAllPropertiesValueByTagAndPopulateLists("<img", "src=");
 	}
 	
-	private void lookForAnchors(){
-		getAllPropertiesValueByTag("<a", "href=");
+	private void lookForAnchorsAndPopulate(){
+		getAllPropertiesValueByTagAndPopulateLists("<a", "href=");
 	}
 	
-	private void getAllPropertiesValueByTag(String subjectTag, String propertyToSearchFor){
+	private void getAllPropertiesValueByTagAndPopulateLists(String subjectTag, String propertyToSearchFor){
 		//LinkedList<String> list = new LinkedList<>();
 		
 		//String subjectTag = "<a";
@@ -232,21 +234,35 @@ public class AnalyzerTask implements Runnable {
 		return str.substring(1, str.length());
 	}
 
-	private void fetchResourcesFouned(){
+	private void fetchResourcesFounedAndAddToReport(){
 		fetchAllFromList(m_images, 0);
 		fetchAllFromList(m_videos, 1);
 		fetchAllFromList(m_docs, 2);
+		fetchAllFromList(m_externalAnchors, 3);
+		fetchFromInternalLinks();
+		
+	}
+	
+	
+	private void fetchFromInternalLinks(){
+		for(int i = 0; i < m_internalAnchors.size(); i++){
+			String address = m_internalAnchors.get(i);
+			Link link = new Link(address, "" , "", "0");
+			m_report.addInternalPageLink(link);
+			
+		}
 	}
 	
 	/**
 	 * @TODO pages in links, are going to be downloaded anyway and will have own reports
 	 * @param list to pop link from
-	 * @param listIdentifier - 0 image , 1 videos , 2 documents, 3 pages
+	 * @param listIdentifier - 0 image , 1 videos , 2 documents, 3 external pages
 	 */
 	private void fetchAllFromList(LinkedList<String> list, int listIdentifier){
 		for(int i = 0; i < list.size(); i++){
 			String address = list.get(i);
 			String extension = getExtensionFromString(address);
+			
 			if(address != null && extension != null){
 				Link link = createLink(address, extension);
 				
@@ -261,7 +277,7 @@ public class AnalyzerTask implements Runnable {
 						m_report.addDocumentLink(link);
 					}
 					else if(i == 3){
-						m_report.addPageLink(link);
+						m_report.addExternalPageLink(link);
 					}
 					
 					
