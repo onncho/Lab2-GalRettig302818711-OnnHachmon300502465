@@ -65,6 +65,7 @@ public class AnalyzerTask implements Runnable {
 		// send all internal link to downloader queue
 		LinkedList<String> internalLinksToDownload = getInternalAnchors();
 		for(int i = 0; i < internalLinksToDownload.size(); i++){
+			System.out.println(String.format("Sending to downloader: %S", internalLinksToDownload.get(i)));
 			Downloader downloader = new Downloader(m_threadPool, internalLinksToDownload.get(i));
 			m_threadPool.putTaskInDownloaderQueue((Runnable) downloader);
 		}
