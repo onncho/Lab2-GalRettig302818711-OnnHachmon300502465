@@ -22,7 +22,9 @@ public class Downloader implements Runnable {
 
 			if (!m_threadPool.containsUrlInList(m_UrlToDownload)) {
 				
+				System.out.println("Downloader starts downloading URL: \t" +  m_UrlToDownload);
 				m_DownloadedHtmlWithBody = m_QuerySite.sendHttpGetRequest(m_UrlToDownload);
+				System.out.println("Downloader ends downloading URL: \t" + m_UrlToDownload);
 				
 				//System.out.println("$$$$$$$$$$$$$$$$$$$$" + "Reponse For Downloader" + "\n" + m_DownloadedHtmlWithBody[0] + "$$$$$$$$$$$$$$$");
 				

@@ -171,7 +171,7 @@ public class HTTPQuery {
 		return new String[]{m_FullRequest, m_messageBodyString};
 	}*/
 	
-	public static String[] readHttpResponse(Socket connection) {
+	public String[] readHttpResponse(Socket connection) {
 		String ContentLengthHeader = "Content-Length: ";
 		int contentLength = -1;
 		String m_FullRequest = "";
