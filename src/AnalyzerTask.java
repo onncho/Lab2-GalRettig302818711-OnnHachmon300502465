@@ -25,6 +25,7 @@ public class AnalyzerTask implements Runnable {
 	String m_htmlSourceCode;
 	URI m_uri;
 	String m_pageAddress;
+	String m_sizeAndTypeOfPage;
 	
 	LinkReport m_report;
 	
@@ -32,6 +33,7 @@ public class AnalyzerTask implements Runnable {
 		m_threadPool = i_threadPool;
 		m_htmlSourceCode = i_htmlSourceCode;
 		m_pageAddress = i_pageAddress;
+		m_sizeAndTypeOfPage = i_lengthAndType;
 		
 		if(m_pageAddress.toLowerCase().indexOf("http://") != 0 && m_pageAddress.toLowerCase().indexOf("https://") != 0){
 			m_pageAddress = "http://" + m_pageAddress;
@@ -292,7 +294,9 @@ public class AnalyzerTask implements Runnable {
 
 	
 	private LinkReport createReport(){
-		LinkReport report = new LinkReport(m_pageAddress);
+		String size = m_sizeAndTypeOfPage.split("#_#@#_#")[1];
+		int sizeInBytes = Integer.parseInt(size);
+		LinkReport report = new LinkReport(m_pageAddress, sizeInBytes);
 		return report;
 	}
 

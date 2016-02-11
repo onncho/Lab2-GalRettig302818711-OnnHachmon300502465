@@ -13,9 +13,11 @@ public class LinkReport {
 	int m_pagesTotalSize;
 	
 	String m_pageAddress;
+	int m_sizeOfPageInBytes;
 	
-	public LinkReport(String i_pageAddress){
+	public LinkReport(String i_pageAddress, int i_size){
 		m_pageAddress = i_pageAddress;
+		m_sizeOfPageInBytes = i_size;
 		
 		m_images = new LinkedList<>();
 		m_videos = new LinkedList<>();
